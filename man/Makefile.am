@@ -24,19 +24,6 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = man
+man_MANS = fuse.1 rzxdump.1 rzxtool.1 tzxlist.1
 
-bin_PROGRAMS = rzxdump rzxtool tzxconv tzxlist
-
-INCLUDES = @GLIB_CFLAGS@ @LIBSPEC_CFLAGS@
-
-rzxdump_SOURCES = rzxdump.c
-
-rzxtool_SOURCES = rzxtool.c
-rzxtool_LDADD = @GLIB_LIBS@ @LIBSPEC_LIBS@
-
-tzxconv_SOURCES = tzxconv.c
-tzxconv_LDADD = @GLIB_LIBS@ @LIBSPEC_LIBS@
-
-tzxlist_SOURCES = tzxlist.c
-tzxlist_LDADD = @GLIB_LIBS@ @LIBSPEC_LIBS@
+EXTRA_DIST = $(man_MANS)
