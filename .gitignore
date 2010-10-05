@@ -15,6 +15,7 @@
 /configure
 /createhdf
 /depcomp
+/fmfconv
 /fuse-utils.qpg
 /install-sh
 /libtool
