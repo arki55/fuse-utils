@@ -1453,26 +1453,27 @@ create_main_data( libspectrum_tape *tape, libspectrum_snap *snap,
 static int
 write_tape( libspectrum_tape *tape, const char *filename )
 {
-  libspectrum_byte *buffer;
+  libspectrum_buffer *buffer = libspectrum_buffer_alloc();
   FILE *f;
   size_t length, written;
   int error;
 
   length = 0;
 
-  error = libspectrum_tape_write( &buffer, &length, tape,
-                                  LIBSPECTRUM_ID_TAPE_TZX );
+  error = libspectrum_tape_write( buffer, tape, LIBSPECTRUM_ID_TAPE_TZX );
   if( error ) return error;
 
   f = fopen( filename, "wb" );
   if( !f ) {
     print_error( "couldn't open output file '%s': %s", filename,
 		 strerror( errno ) );
-    free( buffer );
+    libspectrum_buffer_free( buffer );
     return 1;
   }
 
-  written = fwrite( buffer, 1, length, f );
+  length = libspectrum_buffer_get_data_size( buffer );
+  written = fwrite( libspectrum_buffer_get_data( buffer ), 1,
+                    length, f );
   if( written != length ) {
     if( written == 0 ) {
       print_error( "error writing to '%s': %s", filename, strerror( errno ) );
@@ -1480,12 +1481,12 @@ write_tape( libspectrum_tape *tape, const char *filename )
       print_error( "could write only %lu of %lu bytes to '%s'",
 		   (unsigned long)written, (unsigned long)length, filename );
     }
-    free( buffer );
+    libspectrum_buffer_free( buffer );
     fclose( f );
     return 1;
   }
 
-  free( buffer );
+  libspectrum_buffer_free( buffer );
 
   if( fclose( f ) ) {
     print_error( "error closing '%s': %s", filename, strerror( errno ) );

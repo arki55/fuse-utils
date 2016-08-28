@@ -254,7 +254,7 @@ main( int argc, char **argv )
 static void
 write_tape( char *filename, libspectrum_tape *tape )
 {
-  libspectrum_byte *buffer; size_t length;
+  libspectrum_buffer *buffer; size_t length;
   FILE *f;
   libspectrum_id_t type;
   libspectrum_class_t cls;
@@ -270,9 +270,9 @@ write_tape( char *filename, libspectrum_tape *tape )
   if( cls != LIBSPECTRUM_CLASS_TAPE || type == LIBSPECTRUM_ID_UNKNOWN )
     type = LIBSPECTRUM_ID_TAPE_TZX;
 
-  length = 0;
+  buffer = libspectrum_buffer_alloc();
 
-  if( libspectrum_tape_write( &buffer, &length, tape, type ) ) {
+  if( libspectrum_tape_write( buffer, tape, type ) ) {
     std::string err("error writing tape buffer");
     throw audio2tape_exception(err.c_str());
   }
@@ -281,19 +281,20 @@ write_tape( char *filename, libspectrum_tape *tape )
   if( !f ) {
     std::ostringstream err;
     err << "couldn't open '" << filename << "': " << strerror( errno );
-    free( buffer );
+    libspectrum_buffer_free( buffer );
     throw audio2tape_exception(err.str().c_str());
   }
     
-  if( fwrite( buffer, 1, length, f ) != length ) {
+  length = libspectrum_buffer_get_data_size( buffer );
+  if( fwrite( libspectrum_buffer_get_data( buffer ), 1, length, f ) != length ) {
     std::ostringstream err;
     err << "error writing to '" << filename << "'";
-    free( buffer );
+    libspectrum_buffer_free( buffer );
     fclose( f );
     throw audio2tape_exception(err.str().c_str());
   }
 
-  free( buffer );
+  libspectrum_buffer_free( buffer );
 
   if( fclose( f ) ) {
     std::ostringstream err;

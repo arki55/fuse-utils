@@ -395,32 +395,32 @@ append_inlay_file( char *inlay_file, libspectrum_tape *tape )
 static int
 write_tape( char *filename, libspectrum_tape *tape )
 {
-  libspectrum_byte *buffer; size_t length;
+  libspectrum_buffer *buffer = libspectrum_buffer_alloc();
+  size_t length;
   FILE *f;
   libspectrum_id_t type;
 
   if( get_type_from_string( &type, filename ) ) return 1;
 
-  length = 0;
-
-  if( libspectrum_tape_write( &buffer, &length, tape, type ) ) return 1;
+  if( libspectrum_tape_write( buffer, tape, type ) ) return 1;
 
   f = fopen( filename, "wb" );
   if( !f ) {
     fprintf( stderr, "%s: couldn't open '%s': %s\n", progname, filename,
 	     strerror( errno ) );
-    free( buffer );
+    libspectrum_buffer_free( buffer );
     return 1;
   }
     
-  if( fwrite( buffer, 1, length, f ) != length ) {
+  length = libspectrum_buffer_get_data_size( buffer );
+  if( fwrite( libspectrum_buffer_get_data( buffer ), 1, length, f ) != length ) {
     fprintf( stderr, "%s: error writing to '%s'\n", progname, filename );
-    free( buffer );
+    libspectrum_buffer_free( buffer );
     fclose( f );
     return 1;
   }
 
-  free( buffer );
+  libspectrum_buffer_free( buffer );
 
   if( fclose( f ) ) {
     fprintf( stderr, "%s: couldn't close '%s': %s\n", progname, filename,

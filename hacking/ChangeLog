@@ -596,3 +596,5 @@
          1.2.2 (Fred).
 20160822 configure.ac: print summary of enabled features when building
          fuse-utils (patch #379) (Alberto Garcia).
+20160828 audio2tape.cc,snap2tzx.c,tapeconv.c: switch to using
+         libspectrum_buffer in tape APIs (Fred).
