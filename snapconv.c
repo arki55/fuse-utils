@@ -95,6 +95,7 @@ main( int argc, char **argv )
   libspectrum_snap *snap;
   libspectrum_id_t type; libspectrum_class_t class;
   unsigned char *buffer; size_t length;
+  libspectrum_buffer *write_buffer;
   libspectrum_creator *creator;
   int flags;
   int compress = 0;
@@ -189,10 +190,11 @@ main( int argc, char **argv )
   error = get_creator( &creator, "snapconv" );
   if( error ) { libspectrum_snap_free( snap ); return error; }
 
-  length = 0;
-  error = libspectrum_snap_write( &buffer, &length, &flags, snap, type,
-                                  creator, compress );
+  write_buffer = libspectrum_buffer_alloc();
+  error = libspectrum_snap_write( write_buffer, &flags, snap, type, creator,
+                                  compress );
   if( error ) {
+    libspectrum_buffer_free( write_buffer );
     libspectrum_creator_free( creator ); libspectrum_snap_free( snap );
     return error;
   }
@@ -206,28 +208,28 @@ main( int argc, char **argv )
 	     "%s: warning: minor information loss during conversion\n",
 	     progname );
   }
-  error = libspectrum_creator_free( creator );
-  if( error ) { free( buffer ); libspectrum_snap_free( snap ); return error; }
+  libspectrum_creator_free( creator );
 
-  error = libspectrum_snap_free( snap );
-  if( error ) { free( buffer ); return error; }
+  libspectrum_snap_free( snap );
 
   f = fopen( argv[1], "wb" );
   if( !f ) {
     fprintf( stderr, "%s: couldn't open '%s': %s\n", progname, argv[1],
 	     strerror( errno ) );
-    free( buffer );
+    libspectrum_buffer_free( write_buffer );
     return 1;
   }
     
-  if( fwrite( buffer, 1, length, f ) != length ) {
+  if( fwrite( libspectrum_buffer_get_data( write_buffer ), 1,
+              libspectrum_buffer_get_data_size( write_buffer ),
+              f ) != length ) {
     fprintf( stderr, "%s: error writing to '%s'\n", progname, argv[1] );
-    free( buffer );
+    libspectrum_buffer_free( write_buffer );
     fclose( f );
     return 1;
   }
 
-  free( buffer );
+  libspectrum_buffer_free( write_buffer );
   fclose( f );
 
   return 0;

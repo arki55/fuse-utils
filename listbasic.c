@@ -218,7 +218,7 @@ parse_snapshot_file( const unsigned char *buffer, size_t length,
   error = extract_basic( program_address, 0, read_snap_memory, snap );
   if( error ) { libspectrum_snap_free( snap ); return error; }
 
-  error = libspectrum_snap_free( snap ); if( error ) return error;
+  libspectrum_snap_free( snap );
 
   return 0;
 }

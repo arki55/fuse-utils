@@ -598,3 +598,5 @@
          fuse-utils (patch #379) (Alberto Garcia).
 20160828 audio2tape.cc,snap2tzx.c,tapeconv.c: switch to using
          libspectrum_buffer in tape APIs (Fred).
+20160831 listbasic.c,rzxtool.c,snapconv.c,utils.c: switch to using
+         libspectrum_buffer in snapshot write APIs (Fred).

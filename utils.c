@@ -66,7 +66,6 @@ get_creator( libspectrum_creator **creator, const char *program )
 {
   char *custom;
   int version[4] = { 0, 0, 0, 0 };
-  libspectrum_error error;
   size_t i;
 
 #ifndef WIN32
@@ -79,20 +78,15 @@ get_creator( libspectrum_creator **creator, const char *program )
 
   *creator = libspectrum_creator_alloc();
 
-  error = libspectrum_creator_set_program( *creator, program );
-  if( error ) { libspectrum_creator_free( *creator ); return error; }
+  libspectrum_creator_set_program( *creator, program );
 
   sscanf( VERSION, "%u.%u.%u.%u",
 	  &version[0], &version[1], &version[2], &version[3] );
   for( i=0; i<4; i++ ) if( version[i] > 0xff ) version[i] = 0xff;
 
-  error = libspectrum_creator_set_major( *creator,
-					 version[0] * 0x100 + version[1] );
-  if( error ) { libspectrum_creator_free( *creator ); return error; }
+  libspectrum_creator_set_major( *creator, version[0] * 0x100 + version[1] );
 
-  error = libspectrum_creator_set_minor( *creator,
-					 version[2] * 0x100 + version[3] );
-  if( error ) { libspectrum_creator_free( *creator ); return error; }
+  libspectrum_creator_set_minor( *creator, version[2] * 0x100 + version[3] );
 
   custom = malloc( 256 );
   if( !custom ) {
@@ -111,13 +105,8 @@ get_creator( libspectrum_creator **creator, const char *program )
 	    osname );
 #endif
 
-  error = libspectrum_creator_set_custom( *creator,
-					  (libspectrum_byte*)custom,
-					  strlen( custom ) );
-  if( error ) {
-    free( custom ); libspectrum_creator_free( *creator );
-    return error;
-  }
+  libspectrum_creator_set_custom( *creator, (libspectrum_byte*)custom,
+                                  strlen( custom ) );
 
   return 0;
 }

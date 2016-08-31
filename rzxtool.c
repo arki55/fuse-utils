@@ -131,7 +131,7 @@ write_file( unsigned char *buffer, size_t length, const char *filename )
 static int
 write_snapshot( libspectrum_snap *snap, const char *filename )
 {
-  unsigned char *buffer = NULL; size_t length = 0;
+  libspectrum_buffer *buffer;
   int error, flags;
   libspectrum_id_t type;
   libspectrum_class_t class;
@@ -143,12 +143,14 @@ write_snapshot( libspectrum_snap *snap, const char *filename )
   if( class != LIBSPECTRUM_CLASS_SNAPSHOT || type == LIBSPECTRUM_ID_UNKNOWN )
     type = LIBSPECTRUM_ID_SNAPSHOT_SZX;
 
-  error = libspectrum_snap_write( &buffer, &length, &flags, snap, type,
-				  creator, 0 );
-  if( error ) return error;
+  buffer = libspectrum_buffer_alloc();
 
-  error = write_file( buffer, length, filename );
-  if( error ) { free( buffer ); return error; }
+  error = libspectrum_snap_write( buffer, &flags, snap, type, creator, 0 );
+  if( error ) { libspectrum_buffer_free( buffer ); return error; }
+
+  error = write_file( libspectrum_buffer_get_data( buffer ),
+                      libspectrum_buffer_get_data_size( buffer ), filename );
+  if( error ) { libspectrum_buffer_free( buffer ); return error; }
 
   free( buffer );
 
