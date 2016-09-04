@@ -242,10 +242,33 @@ do_file( const char *filename )
   return 0;
 }
 
+static void
+print_canonical_version( const char *creator, libspectrum_word major_version,
+                         libspectrum_word minor_version )
+{
+  printf( "  Creator canonical version: " );
+
+  if( !strncmp( creator, "Fuse", strlen( "Fuse" ) ) ||
+      !strncmp( creator, "rzxtool", strlen( "rzxtool" ) )) {
+    printf( "%d.%d.%d.%d\n", major_version / 0x100, major_version % 0x100,
+            minor_version / 0x100, minor_version % 0x100 );
+  } else if( !strncmp( creator, "Spectaculator", strlen( "Spectaculator" ) ) ) {
+    printf( "%d.%d.%d\n", major_version / 10, major_version % 10,
+            minor_version );
+  } else if( !strncmp( creator, "RealSpectrum", strlen( "RealSpectrum" ) ) ) {
+    printf( "%x.%x\n", major_version, minor_version );
+  } else {
+    /* Simple decimal version (EmuZWin, SpecEmu, SPIN) */
+    printf( "%d.%d\n", major_version, minor_version );
+  }
+}
+
 static int
 read_creator_block( unsigned char **ptr, unsigned char *end )
 {
   size_t length;
+  libspectrum_word major_version, minor_version;
+  unsigned char *creator;
 
   if( end - *ptr < 28 ) {
     fprintf( stderr,
@@ -257,9 +280,13 @@ read_creator_block( unsigned char **ptr, unsigned char *end )
 
   length = read_dword( ptr );
   printf( "  Length: %ld bytes\n", (unsigned long)length );
-  printf( "  Creator: `%s'\n", *ptr ); (*ptr) += 20;
-  printf( "  Creator major version: %d\n", read_word( ptr ) );
-  printf( "  Creator minor version: %d\n", read_word( ptr ) );
+  creator = *ptr; (*ptr) += 20;
+  major_version = read_word( ptr );
+  minor_version = read_word( ptr );
+  printf( "  Creator: `%s'\n", creator );
+  printf( "  Creator major version: %d\n", major_version );
+  printf( "  Creator minor version: %d\n", minor_version );
+  print_canonical_version( (char *)creator, major_version, minor_version );
   printf( "  Creator custom data: %ld bytes\n", (unsigned long)length - 29 );
   (*ptr) += length - 29;
 

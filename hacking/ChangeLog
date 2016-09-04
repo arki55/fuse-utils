@@ -599,3 +599,5 @@
 20160905 rzxdump.c: don't assume ASCII encoding in paths for external snapshots
          (Sergio).
 20160905 rzxdump.c: print offset of unknown block types (Sergio).
+20160905 rzxdump.c: print the canonical version of the creator based on
+         major/minor versions (Sergio).
