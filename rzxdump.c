@@ -227,7 +227,8 @@ do_file( const char *filename )
     case 0x80: error = read_input_block( &ptr, end ); break;
 
     default:
-      fprintf( stderr, "%s: Unknown block type 0x%02x\n", progname, id );
+      fprintf( stderr, "%s: Unknown block type 0x%02x at offset %ld\n",
+               progname, id, ptr - buffer - 1 );
       free( buffer );
       return 1;
 

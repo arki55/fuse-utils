@@ -598,3 +598,4 @@
          fuse-utils (patch #379) (Alberto Garcia).
 20160905 rzxdump.c: don't assume ASCII encoding in paths for external snapshots
          (Sergio).
+20160905 rzxdump.c: print offset of unknown block types (Sergio).
