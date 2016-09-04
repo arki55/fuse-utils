@@ -596,3 +596,5 @@
          1.2.2 (Fred).
 20160822 configure.ac: print summary of enabled features when building
          fuse-utils (patch #379) (Alberto Garcia).
+20160905 rzxdump.c: don't assume ASCII encoding in paths for external snapshots
+         (Sergio).

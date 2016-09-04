@@ -265,10 +265,28 @@ read_creator_block( unsigned char **ptr, unsigned char *end )
   return 0;
 }
 
+static void
+print_ascii_string( unsigned char *data, size_t length )
+{
+  unsigned int i;
+
+  for( i = 0; i < length; i++) {
+    unsigned char c;
+
+    if( data[i] >= 32 && data[i] < 127 ) {
+      c = data[i];
+    } else {
+      c = '?';
+    }
+
+    printf( "%c", c );
+  }
+}
+
 static int
 read_snapshot_block( unsigned char **ptr, unsigned char *end )
 {
-  size_t block_length;
+  size_t block_length, path_length;
   libspectrum_dword flags;
 
   if( end - *ptr < 16 ) {
@@ -289,9 +307,25 @@ read_snapshot_block( unsigned char **ptr, unsigned char *end )
   printf( "  Snapshot extension: `%s'\n", *ptr ); (*ptr) += 4;
   printf( "  Snap length: %d bytes\n", read_dword( ptr ) );
 
-  if( ( flags & 0x01 ) && !( flags & 0x02 ) )
-    printf( "  Snap path: %s\n", *ptr + 4 );
+  /* Snapshot descriptor */
+  if( ( flags & 0x01 ) && !( flags & 0x02 ) ) {
+    if( end - *ptr < 5 ) {
+      fprintf( stderr, "%s: Not enough bytes for snapshot block\n", progname );
+      return 1;
+    }
 
+    printf( "  Checksum: 0x%08x\n", read_dword( ptr ) );
+
+    printf( "  Snap path: " );
+    path_length = block_length - 17 - 4;
+    print_ascii_string( *ptr, path_length - 1 );
+    printf( "\n" );
+
+    (*ptr) += path_length;
+    return 0;
+  }
+
+  /* Snapshot data */
   (*ptr) += block_length - 17;
 
   return 0;
