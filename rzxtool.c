@@ -454,19 +454,19 @@ parse_options( int argc, char **argv, GSList **actions,
 static int
 write_rzx( const char *filename, libspectrum_rzx *rzx, int compressed )
 {
-  unsigned char *buffer = NULL; size_t length = 0;
-  int error;
+  libspectrum_buffer *buffer = libspectrum_buffer_alloc();
+  int error = 0;
 
-  error = libspectrum_rzx_write( &buffer, &length, rzx, LIBSPECTRUM_ID_UNKNOWN,
-				 creator, compressed, NULL );
-  if( error ) return error;
+  error = libspectrum_rzx_write( buffer, rzx, LIBSPECTRUM_ID_UNKNOWN, creator,
+                                 compressed, NULL );
+  if( error != 0 ) {
+    error = write_file( libspectrum_buffer_get_data( buffer ),
+                        libspectrum_buffer_get_data_size( buffer ), filename );
+  }
 
-  error = write_file( buffer, length, filename );
-  if( error ) { free( buffer ); return error; }
+  libspectrum_buffer_free( buffer );
 
-  free( buffer );
-
-  return 0;
+  return error;
 }  
 
 int

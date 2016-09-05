@@ -600,3 +600,5 @@
          libspectrum_buffer in tape APIs (Fred).
 20160831 listbasic.c,rzxtool.c,snapconv.c,utils.c: switch to using
          libspectrum_buffer in snapshot write APIs (Fred).
+20160905 rzxtool.c: switch to using libspectrum_buffer in RZX write APIs
+         (Fred).
