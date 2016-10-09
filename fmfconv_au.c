@@ -1,4 +1,4 @@
-/* fmfconv_wav.c: wav output routine included into fmfconv.c
+/* fmfconv_au.c: au output routine included into fmfconv.c
    Copyright (c) 2004-2015 Gergely Szasz
 
    $Id$
@@ -35,7 +35,7 @@ static int
 snd_write_auheader( void )
 {
   const char str[] =
-    "fmfconv created AU file (http://fuse-emulator.sourceforge.net)\n";
+    "ZX Spectrum audio created by fmfconv: http://fuse-emulator.sourceforge.net/";
   size_t len = sizeof(str); /* Includes the null terminator */
   int padding = len % 8;
   libspectrum_dword buff[6];

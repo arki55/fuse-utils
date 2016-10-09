@@ -36,8 +36,8 @@ int
 out_write_ppm( void )
 {
   fprintf( out, ( greyscale ? "P5\n" : "P6\n" ) );
-  fprintf( out, "#ZX Spectrum screenshot created by fmfconv "
-           "(http://fuse-emulator.sourceforge.net)\n"
+  fprintf( out, "#ZX Spectrum screenshot created by fmfconv: "
+           "http://fuse-emulator.sourceforge.net/\n"
            "%u %u 255\n", frm_w, frm_h );
 
   if( fwrite( pix_rgb, frm_w * frm_h * ( greyscale ? 1 : 3 ), 1, out ) != 1 )

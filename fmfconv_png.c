@@ -116,15 +116,15 @@ out_write_png( void )
   }
 
   text[0].key = "Software";
-  text[0].text = "fmfconv -- Fuse Movie File converting utility\n";
+  text[0].text = "fmfconv -- Fuse Movie File converting utility";
   text[0].compression = PNG_TEXT_COMPRESSION_NONE;
 
   text[1].key = "Description";
-  text[1].text = "ZX Spectrum PNG screenshot created by fmfconv\n";
+  text[1].text = "ZX Spectrum screenshot created by fmfconv";
   text[1].compression = PNG_TEXT_COMPRESSION_NONE;
 
   text[2].key = "URL";
-  text[2].text = "http://fuse-emulator.sourceforge.net";
+  text[2].text = "http://fuse-emulator.sourceforge.net/";
   text[2].compression = PNG_TEXT_COMPRESSION_NONE;
 
   png_set_text( png_ptr, info_ptr, text, 3 );

@@ -601,3 +601,6 @@
 20160905 rzxdump.c: print offset of unknown block types (Sergio).
 20160905 rzxdump.c: print the canonical version of the creator based on
          major/minor versions (Sergio).
+20161009 fmfconv_au.c,fmfconv_avi.c,fmfconv_jpg.c,fmfconv_png.c,fmfconv_ppm.c:
+         fix metadata in AVI files according to RIFF format and standardise in
+         other formats (fixes bug #321) (thanks, Stuart) (Sergio).

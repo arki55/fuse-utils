@@ -70,6 +70,7 @@ Byte order: Little-endian
                    buffer[idx++] = ( (x) & 0xff000000U ) >> 24
 
 #define WSTRING( str ) fwrite( str, strlen( str ), 1, out )
+#define WZSTRING( str ) fwrite( str, strlen( str ) + 1, 1, out )
 
 #define WORD2( w1, w2 ) WORD( w1 ); DWORD( w2 )
 #define WORD4( w1, w2, w3, w4 ) WORD2( w1, w2 ); DWORD2( w3, w4 )
@@ -216,12 +217,14 @@ out_write_aviheader( void )
 /* (w)nBlockAlign, wBitsPerSample */
   W2WORD( snd_fsz, 8 * snd_fsz / snd_chn );
 
-  WSTRING( "LIST" ); WDWORD( 0x08c ); WSTRING( "INFOISFT" ); WDWORD( 0x02e );
-  WSTRING( "fmfconv -- Fuse Movie File converting utility\n" );
-  WSTRING( "ICMT" ); WDWORD( 0x04a );
-  WSTRING( "ZX Spectrum movie created by fmfconv\n" );
-  WSTRING( "http://fuse-emulator.sourceforge.net\n" );
-#define AVI_POS_MOVILEN 0x21cL
+/* Metadata */
+  WSTRING( "LIST" ); WDWORD( 0x08e ); WSTRING( "INFOISFT" ); WDWORD( 0x02e );
+  WZSTRING( "fmfconv -- Fuse Movie File converting utility" );
+  WSTRING( "ICMT" ); WDWORD( 0x04c );
+  WSTRING( "ZX Spectrum movie created by fmfconv: " );
+  WZSTRING( "http://fuse-emulator.sourceforge.net/" );
+
+#define AVI_POS_MOVILEN 0x21eL
 #define AVI_POS_MOVISTART ( AVI_POS_MOVILEN + 4L )
   WSTRING( "LIST" ); WDWORD( 0 ); WSTRING( "movi" ); /* 00dc .... ; 01wb .... */
 

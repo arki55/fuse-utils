@@ -127,7 +127,7 @@ out_write_mjpeg( void )
 {
   int err;
   const char str[] =
-    "fmfconv created M-JPEG file (http://fuse-emulator.sourceforge.net)\n";
+    "ZX Spectrum movie created by fmfconv: http://fuse-emulator.sourceforge.net/";
 
   if( ( err = write_jpeg_img( FALSE, out_header_ok ? NULL : (void *)str ) ) )
     return err;
@@ -148,7 +148,7 @@ out_write_jpg( void )
 {
   int err;
   const char str[] =
-    "fmfconv created JPEG file (http://fuse-emulator.sourceforge.net)\n";
+    "ZX Spectrum screenshot created by fmfconv: http://fuse-emulator.sourceforge.net/";
 
   if( ( err = write_jpeg_img( TRUE, (void *)str ) ) ) return err;
   jpeg_header_ok = 0;
