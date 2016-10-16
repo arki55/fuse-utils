@@ -604,3 +604,4 @@
 20161009 fmfconv_au.c,fmfconv_avi.c,fmfconv_jpg.c,fmfconv_png.c,fmfconv_ppm.c:
          fix metadata in AVI files according to RIFF format and standardise in
          other formats (fixes bug #321) (thanks, Stuart) (Sergio).
+20161016 fmfconv.c: remove unused function fmf_read_init() (Sergio).

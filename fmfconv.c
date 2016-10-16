@@ -1219,19 +1219,6 @@ fmf_read_chunk_head( void )
 }
 
 static int
-fmf_read_init( void )		/* read first N */
-{
-  int err;
-  if( ( err = fmf_read_chunk_head() ) ) return err;
-
-  if( fhead[0] != 'N' ) {				/* end of record... */
-    printe( "\n\nfmf_read_init(): Corrupt input file (N) @0x%08lx.\n", (unsigned long)ftell( inp_file ) );
-    return ERR_CORRUPT_INP;
-  }
-  return fmf_read_frame_head();
-}
-
-static int
 fmf_read_sound( void )
 {
   int err;
