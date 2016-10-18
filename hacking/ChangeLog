@@ -601,7 +601,23 @@
 20160905 rzxdump.c: print offset of unknown block types (Sergio).
 20160905 rzxdump.c: print the canonical version of the creator based on
          major/minor versions (Sergio).
+20160924 ChangeLog,configure.ac,man/{audio2tape.1,createhdf.1,fmfconv.1,
+         fuse-utils.1,listbasic.1,profile2map.1,raw2hdf.1,rzxcheck.1,rzxdump.1,
+         rzxtool.1,scl2trd.1,snap2tzx.1,snapconv.1,tape2pulses.1,tape2wav.1,
+         tapeconv.1,tzxlist.1}: first updates for a "1.3.0" release (Fred).
+20160924 README: bump version to 1.3.0 (Sergio).
+20160928 README: redirect bug and issue reports to the forums and development
+         email list (thanks, Sergio) (Fred).
+20161002 README,man/{audio2tape.1,createhdf.1,fmfconv.1,fuse-utils.1,
+         listbasic.1,profile2map.1,raw2hdf.1,rzxcheck.1,rzxdump.1,rzxtool.1,
+         scl2trd.1,snap2tzx.1,snapconv.1,tape2pulses.1,tape2wav.1,tapeconv.1,
+         tzxlist.1}: update release dates for 1.3.0 (Fred).
+20161002 README: update release dates for 1.3.0 (Fred).
 20161009 fmfconv_au.c,fmfconv_avi.c,fmfconv_jpg.c,fmfconv_png.c,fmfconv_ppm.c:
          fix metadata in AVI files according to RIFF format and standardise in
          other formats (fixes bug #321) (thanks, Stuart) (Sergio).
 20161016 fmfconv.c: remove unused function fmf_read_init() (Sergio).
+20161018 ChangeLog,README,configure.ac,man/{audio2tape.1,createhdf.1,fmfconv.1,
+         fuse-utils.1,listbasic.1,profile2map.1,raw2hdf.1,rzxcheck.1,rzxdump.1,
+         rzxtool.1,scl2trd.1,snap2tzx.1,snapconv.1,tape2pulses.1,tape2wav.1,
+         tapeconv.1,tzxlist.1}: merge changes from 1.3.0 release (Fred).

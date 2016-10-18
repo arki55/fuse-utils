@@ -1,3 +1,15 @@
+2016-10-02  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+
+        * Version 1.3.0 released
+
+        * Print summary of enabled features when building fuse-utils (Alberto
+          Garcia).
+
+        * rzxdump
+          * Print offset of unknown block types (Sergio Baldoví).
+          * Print the canonical version of the creator based on major/minor
+            versions (Sergio Baldoví).
+
 2016-08-21  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
         * Version 1.2.2 released

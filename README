@@ -1,4 +1,4 @@
-The Fuse utilities version 1.2.2
+The Fuse utilities version 1.3.0
 ================================
 
 The Fuse utilities are a few tools which may be of occasional use when
@@ -52,7 +52,10 @@ under `DIR'.
 The latest version of the utilities should always be available from
 http://fuse-emulator.sourceforge.net/fuse.php
 
-Please send any bug reports, comments, etc to me.
+If you're having a problem using/running/building fuse-utils, the two places
+you're most likely to get help are the development mailing list
+<fuse-emulator-devel@lists.sf.net> or the official forums at
+<http://sourceforge.net/forum/?group_id=91293>.
 
 Compiling from Subversion
 -------------------------
@@ -62,6 +65,6 @@ of the released tarballs, you'll need to run `autogen.sh' before
 running 'configure' for the first time.
 
 Philip Kendall <philip-fuse@shadowmagic.org.uk>
-21st August, 2016
+2nd October, 2016
 
 $Id$
