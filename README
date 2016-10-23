@@ -17,7 +17,7 @@ The available utilities are:
 * rzxcheck: verify the digital signature in an RZX file.
 * rzxdump: list the contents of an RZX input recording file.
 * rzxtool: add, extract or remove the embedded snapshot from an RZX file,
-	   or compress or uncompress the file.
+           or compress or uncompress the file.
 * scl2trd: convert .scl disk images to .trd disk images.
 * snap2tzx: convert snapshots to TZX tape images.
 * snapconv: convert between snapshot formats.
@@ -55,7 +55,7 @@ http://fuse-emulator.sourceforge.net/fuse.php
 If you're having a problem using/running/building fuse-utils, the two places
 you're most likely to get help are the development mailing list
 <fuse-emulator-devel@lists.sf.net> or the official forums at
-<http://sourceforge.net/forum/?group_id=91293>.
+<https://sourceforge.net/p/fuse-emulator/discussion/>.
 
 Compiling from Git
 ------------------
