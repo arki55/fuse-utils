@@ -57,14 +57,12 @@ you're most likely to get help are the development mailing list
 <fuse-emulator-devel@lists.sf.net> or the official forums at
 <http://sourceforge.net/forum/?group_id=91293>.
 
-Compiling from Subversion
--------------------------
+Compiling from Git
+------------------
 
-If you're using version of fuse-utils from Subversion rather than one
+If you're using version of fuse-utils from Git rather than one
 of the released tarballs, you'll need to run `autogen.sh' before
 running 'configure' for the first time.
 
 Philip Kendall <philip-fuse@shadowmagic.org.uk>
 2nd October, 2016
-
-$Id$
