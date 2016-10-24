@@ -23,5 +23,4 @@
 ## E-mail: philip-fuse@shadowmagic.org.uk
 
 EXTRA_DIST += \
-              hacking/ChangeLog \
               hacking/cvs-tags
