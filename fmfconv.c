@@ -1470,7 +1470,9 @@ we have to handle cut here
 static int
 scr_read_scr( void )
 {
-  return 0;
+  /* FIXME: implement SCR support or remove this. Unknown file format is
+     interpreted as SCR file */
+  return 1;
 }
 
 /* store RGB/YUV/Paletted color/grayscale pixel*/
@@ -1623,14 +1625,13 @@ close_out( void )
   out = NULL;
 }
 
-static int
+static void
 prepare_next_file( void )		/* multiple input file */
 {
   if( input_no > input_last_no )
     do_now = DO_EOP;		/* no more file */
   else
     input_no++;
-  return 0;
 }
 
 static void
@@ -2132,7 +2133,7 @@ fmfconv_exit( int signal )
 int
 main( int argc, char *argv[] )
 {
-  int err, eop = 0;
+  int err = 0, eop = 0;
 
   progname = argv[0];
 
@@ -2181,16 +2182,19 @@ main( int argc, char *argv[] )
 
   while( !eop ) {
     if( fmfconv_stop ) do_now = DO_EOP;
+
     switch ( do_now ) {
     case DO_FILE:
-      if( ( err = prepare_next_file() ) ) eop = 1;	/* if we read from multiple file... */
-      if( do_now != DO_EOP && ( err = open_inp() ) ) eop = 1;		/* open (next) input file */
+      prepare_next_file();
+      /* If we process multiple files, open (next) input file */
+      if( do_now != DO_EOP && ( err = open_inp() ) ) eop = 1;
       break;
     case DO_HEAD:					/* read (next) file header */
       if( ( err = fmf_read_head() ) ) eop = 1;
       break;
     case DO_FRAME_HEAD:
-      if( ( err = fmf_read_frame_head() ) ) eop = 1;	/* after finish a frame read next settings */
+      /* After finishing a frame, read next frame settings */
+      if( ( err = fmf_read_frame_head() ) ) eop = 1;
       break;
     case DO_SLICE:					/* read next fmf slice or 'N' or 'S' or 'X' */
       if( inp_t == TYPE_FMF ) {
@@ -2229,12 +2233,17 @@ main( int argc, char *argv[] )
       }
       break;
     case DO_EOP:
+      eop = 1;
+      break;
     default:
+      printe( "Unknown action type %d\n", do_now );
       eop = 1;
       break;
     }
+
     if( prg_t != TYPE_NONE && frame_no % 11 == 0 ) print_progress( 0 );
   }
+
   if( prg_t != TYPE_NONE ) print_progress( 1 ); /* update progress */
   if( ( out_t >= TYPE_SCR && out_t <= TYPE_JPEG ) && out_name ) unlink( out_name );
   close_snd();				/* close snd file */
@@ -2250,5 +2259,5 @@ main( int argc, char *argv[] )
   inflateEnd( &zstream );
 #endif	/* USE_ZLIB */
 
-  return 0;
+  return err;
 }
