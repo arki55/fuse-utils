@@ -12,6 +12,7 @@
 /config.sub
 /configure
 /createhdf
+.DS_Store
 /depcomp
 .deps
 .dirstamp
