@@ -1329,7 +1329,7 @@ fmf_gen_sound( void )
   return 0;
 }
 
-static void
+static int
 close_snd( void )
 {
   snd_write_sound(); /* write pending sound data */
@@ -1340,9 +1340,17 @@ close_snd( void )
   else if( snd_t == TYPE_AIFF )
     snd_finalize_aiff();
 
-  if( !snd ) return;
-  fclose( snd );
+  if( !snd ) return 0;
+
+  if( fclose( snd ) ) {
+    fprintf( stderr, "%s: error closing `%s': %s\n", progname, snd_name,
+             strerror( errno ) );
+    snd = NULL;
+    return ERR_WRITE_SND;
+  }
+
   snd = NULL;
+  return 0;
 }
 
 static int
@@ -1610,10 +1618,10 @@ out_write_frame( void )
   return 0;
 }
 
-void
+int
 close_out( void )
 {
-  if( !out ) return;
+  if( !out ) return 0;
 
 #ifdef USE_LIBJPEG
   if( out_t == TYPE_MJPEG && out_header_ok )
@@ -1621,8 +1629,16 @@ close_out( void )
 #endif
   if( out_t == TYPE_AVI && out_header_ok )
     out_finalize_avi();
-  fclose( out );
+
+  if( fclose( out ) ) {
+    fprintf( stderr, "%s: error closing `%s': %s\n", progname, out_name,
+             strerror( errno ) );
+    out = NULL;
+    return ERR_WRITE_OUT;
+  }
+
   out = NULL;
+  return 0;
 }
 
 static void
@@ -2244,20 +2260,34 @@ main( int argc, char *argv[] )
     if( prg_t != TYPE_NONE && frame_no % 11 == 0 ) print_progress( 0 );
   }
 
-  if( prg_t != TYPE_NONE ) print_progress( 1 ); /* update progress */
+  if( prg_t != TYPE_NONE ) {
+    print_progress( 1 ); /* update progress */
+    fprintf( stderr, "\n" );
+  }
+
+#ifdef USE_ZLIB
+  inflateEnd( &zstream );
+#endif	/* USE_ZLIB */
+
   if( ( out_t >= TYPE_SCR && out_t <= TYPE_JPEG ) && out_name ) unlink( out_name );
-  close_snd();				/* close snd file */
-  close_out();				/* close out file */
-  if( prg_t != TYPE_NONE ) fprintf( stderr, "\n" );
+
+  /* close snd file */
+  err = close_snd();
+  if( err ) {
+    close_out();
+    return err;
+  }
+
+  /* close out file */
+  err = close_out();
+  if( err ) return err;
+
+  /* print global stats */
   printi( 0, "main(): read %"PRIu64" frame (%"PRIu64" sec) and %"PRIu64" fmf slice and %"PRIu64" fmf sound chunk\n",
 		frame_no, time_sec, fmf_slice_no, fmf_sound_no );
   if( !do_info )
     printi( 0, "main(): wrote %"PRIu64" frame dropped %"PRIu64" frame and inserted %"PRIu64" frame\n",
 		output_no, drop_no, dupl_no );
 
-#ifdef USE_ZLIB
-  inflateEnd( &zstream );
-#endif	/* USE_ZLIB */
-
-  return err;
+  return 0;
 }

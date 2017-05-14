@@ -282,12 +282,24 @@ main( int argc, char **argv )
   }
 
   error = write_header( fd, cylinders, heads, sectors, compact, filename,
-			version );
-  if( error ) return error;
+                        version );
+  if( error ) {
+    close( fd );
+    return error;
+  }
 
   error = write_data( fd, cylinders, heads, sectors, compact, sparse,
-		      filename, version );
-  if( error ) return error;
+                      filename, version );
+  if( error ) {
+    close( fd );
+    return error;
+  }
+
+  if( close( fd ) ) {
+    fprintf( stderr, "%s: error closing `%s': %s\n", progname, filename,
+             strerror( errno ) );
+    return 1;
+  }
 
   return 0;
 }

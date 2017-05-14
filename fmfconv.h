@@ -165,7 +165,7 @@ FILE *fopen_overwr( const char *path, const char *mode, int rw );
 libspectrum_dword swap_endian_dword( libspectrum_dword d );
 void pcm_swap_endian( void );	/* buff == sound */
 int next_outname( libspectrum_qword num );
-void close_out( void );
+int close_out( void );
 int open_out( void );
 
 int snd_write_avi( void );

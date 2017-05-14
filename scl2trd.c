@@ -139,7 +139,14 @@ Scl2Trd(char *oldname, char *newname)
 
       free(mem);
     }
-    fclose(fh);
+
+    if( fclose(fh) ) {
+      printf("Error closing TRD file %s\n", newname);
+      return 1;
+    }
+  } else {
+    printf("Error - cannot open TRD disk image %s !\n", newname);
+    return 1;
   }
 
   if ((TRD = open(newname, O_RDWR | O_BINARY)) == -1) {
@@ -275,12 +282,20 @@ Scl2Trd(char *oldname, char *newname)
 Finish:
   lseek(TRD, 0L, SEEK_SET);
   bytes_written = write(TRD, TRDh, 4096);
-  close(TRD);
-  free(TRDh);
   if (bytes_written < 4096) {
     fprintf( stderr, "Error - writing header to TRD file %s\n", newname );
+    close(TRD);
+    free(TRDh);
     return 1;
   }
+
+  free(TRDh);
+
+  if( close(TRD) ) {
+    printf("Error closing TRD file %s\n", newname);
+    return 1;
+  }
+
   return 0;
 
 Abort:

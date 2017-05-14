@@ -287,7 +287,10 @@ decode_header( libspectrum_tape_block *block )
     printf("\n");
     if( f ) {
       fprintf( f, "\n" );
-      fclose( f );
+      if( fclose( f ) ) {
+        fprintf( stderr, "%s: error closing `%s': %s\n", progname, filename,
+                 strerror( errno ) );
+      }
     }
   }
   check_checksum(length, data);

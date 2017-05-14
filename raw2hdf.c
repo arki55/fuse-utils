@@ -313,7 +313,11 @@ main( int argc, char **argv )
     return error;
   }
 
-  fclose( hdf );
+  if( fclose( hdf ) ) {
+    fprintf( stderr, "%s: error closing `%s': %s\n", progname, hdf_filename,
+             strerror( errno ) );
+    return 1;
+  }
 
   return 0;
 }
