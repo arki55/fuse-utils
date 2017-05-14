@@ -143,14 +143,14 @@ Scl2Trd(char *oldname, char *newname)
   }
 
   if ((TRD = open(newname, O_RDWR | O_BINARY)) == -1) {
-    printf("Error - cannot open TRD disk image %s !\n", newname);
+    fprintf( stderr, "Error - cannot open TRD disk image %s !\n", newname );
     return 1;
   }
 
   TRDh = malloc(4096);
   bytes_read = read(TRD, TRDh, 4096);
   if (bytes_read < 4096) {
-    printf("Error - cannot read TRD header from %s\n", newname);
+    fprintf( stderr, "Error - cannot read TRD header from %s\n", newname );
     close(TRD);
     free(TRDh);
     return 1;
@@ -162,31 +162,34 @@ Scl2Trd(char *oldname, char *newname)
   trd_ftrk = (unsigned char *) TRDh + 0x8E2;
 
   if ((SCL = open(oldname, O_RDONLY | O_BINARY)) == -1) {
-    printf("Can't open SCL file %s.\n", oldname);
+    fprintf( stderr, "Can't open SCL file %s.\n", oldname );
     goto Abort;
   }
 
   bytes_read = read(SCL, &signature, 8);
   if (bytes_read < 8) {
-    printf("Error - cannot read signature from SCL file %s\n", oldname);
+    fprintf( stderr, "Error - cannot read signature from SCL file %s\n",
+             oldname );
     goto Abort;
   }
 
   if (strncasecmp(signature, "SINCLAIR", 8)) {
-    printf("Wrong signature=%s. \n", signature);
+    fprintf( stderr, "Wrong signature=%s. \n", signature );
     goto Abort;
   }
 
   bytes_read = read(SCL, &blocks, 1);
   if (bytes_read < 1) {
-    printf("Error - cannot read number of files in SCL file %s\n", oldname);
+    fprintf( stderr, "Error - cannot read number of files in SCL file %s\n",
+             oldname );
     goto Abort;
   }
 
   for (x = 0; x < blocks; x++) {
     bytes_read = read(SCL, &(headers[x][0]), 14);
     if (bytes_read < 14) {
-      printf("Error - cannot read header %d from SCL file %s\n", x, oldname);
+      fprintf( stderr, "Error - cannot read header %d from SCL file %s\n", x,
+               oldname );
       goto Abort;
     }
   }
@@ -194,14 +197,15 @@ Scl2Trd(char *oldname, char *newname)
   for (x = 0; x < blocks; x++) {
     size = headers[x][13];
     if (lsb2ui(tmp) < size) {
-      printf("file is too long to fit in the image *trd_free=%u < size=%u\n",
-              lsb2ui(tmp), size);
+      fprintf( stderr,
+               "file is too long to fit in the image *trd_free=%u < size=%u\n",
+               lsb2ui(tmp), size );
       close(SCL);
       goto Finish;
     }
 
     if (*trd_files > 127) {
-      printf("image is full\n");
+      fprintf( stderr, "image is full\n" );
       close(SCL);
       goto Finish;
     }
@@ -221,13 +225,13 @@ Scl2Trd(char *oldname, char *newname)
     while (left > 32000) {
       bytes_read = read(SCL, tmpscl, 32000);
       if (bytes_read <= 0) {
-        printf("Error - reading file %d from SCL %s\n", x, oldname);
+        fprintf( stderr, "Error - reading file %d from SCL %s\n", x, oldname );
         goto Abort;
       }
 
       bytes_written = write(TRD, tmpscl, bytes_read);
       if (bytes_written < bytes_read) {
-        printf("Error - writing to TRD file %s\n", newname);
+        fprintf( stderr, "Error - writing to TRD file %s\n", newname );
         goto Abort;
       }
 
@@ -237,13 +241,13 @@ Scl2Trd(char *oldname, char *newname)
     if (left > 0) {
       bytes_read = read(SCL, tmpscl, left);
       if (bytes_read < (ssize_t)left) {
-        printf("Error - reading file %d from SCL %s\n", x, oldname);
+        fprintf( stderr, "Error - reading file %d from SCL %s\n", x, oldname );
         goto Abort;
       }
 
       bytes_written = write(TRD, tmpscl, bytes_read);
       if (bytes_written < bytes_read) {
-        printf("Error - writing to TRD file %s\n", newname);
+        fprintf( stderr, "Error - writing to TRD file %s\n", newname );
         goto Abort;
       }
     }
@@ -274,7 +278,7 @@ Finish:
   close(TRD);
   free(TRDh);
   if (bytes_written < 4096) {
-    printf("Error - writing header to TRD file %s\n", newname);
+    fprintf( stderr, "Error - writing header to TRD file %s\n", newname );
     return 1;
   }
   return 0;
