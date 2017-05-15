@@ -97,7 +97,6 @@ main( int argc, char **argv )
   int flags;
   int compress = 0;
   int fix = 0;
-  FILE *f;
 
   int error = 0;
   int c;
@@ -210,23 +209,10 @@ main( int argc, char **argv )
   error = libspectrum_snap_free( snap );
   if( error ) { free( buffer ); return error; }
 
-  f = fopen( argv[1], "wb" );
-  if( !f ) {
-    fprintf( stderr, "%s: couldn't open '%s': %s\n", progname, argv[1],
-	     strerror( errno ) );
-    free( buffer );
-    return 1;
-  }
-    
-  if( fwrite( buffer, 1, length, f ) != length ) {
-    fprintf( stderr, "%s: error writing to '%s'\n", progname, argv[1] );
-    free( buffer );
-    fclose( f );
-    return 1;
-  }
+  error = write_file( argv[1], buffer, length );
+  if( error ) { free( buffer ); return error; }
 
   free( buffer );
-  fclose( f );
 
   return 0;
 }

@@ -146,17 +146,8 @@ int main( int argc, char **argv )
 
   fclose( f );
 
-  f = fopen( mapfile, "wb" );
-  if( !f ) {
-    fprintf( stderr, "%s: unable to open Z80 map '%s' for writing\n", progname,
-	     mapfile );
-    return 1;
-  }
-
-  if( fwrite( map, sizeof( map ), 1, f ) != 1 )
-    fprintf( stderr, "%s: failed to write Z80 map '%s'\n", progname, mapfile );
-
-  fclose( f );
+  error = write_file( mapfile, map, sizeof( map ) );
+  if( error ) { return error; }
 
   return 0;
 }

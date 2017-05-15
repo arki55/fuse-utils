@@ -230,6 +230,8 @@ decode_header( libspectrum_tape_block *block )
   int save = 0;
   static int save_data = -9999;
   FILE *f = NULL;
+  int error;
+
   if(is_header) {
     save = ( dump_block == -1 || dump_block == block_num ) ? 1 : 0;
     if( save ) {
@@ -301,15 +303,9 @@ decode_header( libspectrum_tape_block *block )
     snprintf( filename, 16, "%08d.%s",
               save || dump_block == block_num ? block_num : save_data,
               save ? "hdr" : "dat" );
-    f = fopen( filename, "wb" );
-    if( !f ) {
-      fprintf( stderr, "%s: couldn't open '%s': %s\n", progname, filename,
-               strerror( errno ) );
-    } else if( fwrite( data + 1, 1, length - 2, f ) != length - 2 ) {
-      fprintf( stderr, "%s: error writing to '%s'\n", progname, filename );
-      fclose( f );
-    } else {
-      fclose( f );
+
+    error = write_file( filename, data + 1, length - 2 );
+    if( !error ) {
       printf( "* Tape block dumped\n" );
     }
   }

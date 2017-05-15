@@ -95,38 +95,6 @@ delete_block( libspectrum_rzx *rzx, size_t where )
 }
 
 static int
-write_file( unsigned char *buffer, size_t length, const char *filename )
-{
-  FILE *f;
-  size_t bytes;
-  int error;
-
-  f = fopen( filename, "wb" );
-  if( !f ) {
-    fprintf( stderr, "%s: couldn't open `%s': %s\n", progname, filename,
-	     strerror( errno ) );
-    return 1;
-  }
-
-  bytes = fwrite( buffer, 1, length, f );
-  if( bytes != length ) {
-    fprintf( stderr, "%s: wrote only %lu of %lu bytes to `%s'\n", progname,
-	     (unsigned long)bytes, (unsigned long)length, filename );
-    fclose( f );
-    return 1;
-  }
-
-  error = fclose( f );
-  if( error ) {
-    fprintf( stderr, "%s: error closing `%s': %s\n", progname, filename,
-	     strerror( errno ) );
-    return 1;
-  }
-
-  return 0;
-}
-
-static int
 write_snapshot( libspectrum_snap *snap, const char *filename )
 {
   unsigned char *buffer = NULL; size_t length = 0;
@@ -145,7 +113,7 @@ write_snapshot( libspectrum_snap *snap, const char *filename )
 				  creator, 0 );
   if( error ) return error;
 
-  error = write_file( buffer, length, filename );
+  error = write_file( filename, buffer, length );
   if( error ) { free( buffer ); return error; }
 
   free( buffer );
@@ -457,7 +425,7 @@ write_rzx( const char *filename, libspectrum_rzx *rzx, int compressed )
 				 creator, compressed, NULL );
   if( error ) return error;
 
-  error = write_file( buffer, length, filename );
+  error = write_file( filename, buffer, length );
   if( error ) { free( buffer ); return error; }
 
   free( buffer );

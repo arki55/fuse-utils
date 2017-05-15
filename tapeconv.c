@@ -394,8 +394,8 @@ static int
 write_tape( char *filename, libspectrum_tape *tape )
 {
   libspectrum_byte *buffer; size_t length;
-  FILE *f;
   libspectrum_id_t type;
+  int error;
 
   if( get_type_from_string( &type, filename ) ) return 1;
 
@@ -403,28 +403,10 @@ write_tape( char *filename, libspectrum_tape *tape )
 
   if( libspectrum_tape_write( &buffer, &length, tape, type ) ) return 1;
 
-  f = fopen( filename, "wb" );
-  if( !f ) {
-    fprintf( stderr, "%s: couldn't open '%s': %s\n", progname, filename,
-	     strerror( errno ) );
-    free( buffer );
-    return 1;
-  }
-    
-  if( fwrite( buffer, 1, length, f ) != length ) {
-    fprintf( stderr, "%s: error writing to '%s'\n", progname, filename );
-    free( buffer );
-    fclose( f );
-    return 1;
-  }
+  error = write_file( filename, buffer, length );
+  if( error ) { free( buffer ); return 1; }
 
   free( buffer );
-
-  if( fclose( f ) ) {
-    fprintf( stderr, "%s: couldn't close '%s': %s\n", progname, filename,
-	     strerror( errno ) );
-    return 1;
-  }
 
   return 0;
 }

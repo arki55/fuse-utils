@@ -173,3 +173,33 @@ read_file( const char *filename, unsigned char **buffer, size_t *length )
   
   return 0;
 }
+
+int
+write_file( const char *filename, const void *buffer, size_t length )
+{
+  FILE *f;
+  size_t bytes;
+
+  f = fopen( filename, "wb" );
+  if( !f ) {
+    fprintf( stderr, "%s: couldn't open `%s': %s\n", progname, filename,
+             strerror( errno ) );
+    return 1;
+  }
+
+  bytes = fwrite( buffer, 1, length, f );
+  if( bytes != length ) {
+    fprintf( stderr, "%s: wrote only %lu of %lu bytes to `%s'\n", progname,
+            (unsigned long)bytes, (unsigned long)length, filename );
+    fclose( f );
+    return 1;
+  }
+
+  if( fclose( f ) ) {
+    fprintf( stderr, "%s: error closing `%s': %s\n", progname, filename,
+             strerror( errno ) );
+    return 1;
+  }
+
+  return 0;
+}

@@ -29,6 +29,7 @@
 int init_libspectrum( void );
 int get_creator( libspectrum_creator **creator, const char *program );
 int read_file( const char *filename, unsigned char **buffer, size_t *length );
+int write_file( const char *filename, const void *buffer, size_t length );
 
 struct rzx_key {
   libspectrum_dword id;

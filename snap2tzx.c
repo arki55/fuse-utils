@@ -1452,8 +1452,7 @@ static int
 write_tape( libspectrum_tape *tape, const char *filename )
 {
   libspectrum_byte *buffer;
-  FILE *f;
-  size_t length, written;
+  size_t length;
   int error;
 
   length = 0;
@@ -1462,33 +1461,10 @@ write_tape( libspectrum_tape *tape, const char *filename )
                                   LIBSPECTRUM_ID_TAPE_TZX );
   if( error ) return error;
 
-  f = fopen( filename, "wb" );
-  if( !f ) {
-    print_error( "couldn't open output file '%s': %s", filename,
-		 strerror( errno ) );
-    free( buffer );
-    return 1;
-  }
-
-  written = fwrite( buffer, 1, length, f );
-  if( written != length ) {
-    if( written == 0 ) {
-      print_error( "error writing to '%s': %s", filename, strerror( errno ) );
-    } else {
-      print_error( "could write only %lu of %lu bytes to '%s'",
-		   (unsigned long)written, (unsigned long)length, filename );
-    }
-    free( buffer );
-    fclose( f );
-    return 1;
-  }
+  error = write_file( filename, buffer, length );
+  if( error ) { free( buffer ); return 1; }
 
   free( buffer );
-
-  if( fclose( f ) ) {
-    print_error( "error closing '%s': %s", filename, strerror( errno ) );
-    return 1;
-  }
 
   return 0;
 }  
