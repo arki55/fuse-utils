@@ -43,7 +43,8 @@ AC_CONFIG_HEADERS([config.h])
 AC_CANONICAL_HOST
 
 dnl Use automake to produce `Makefile.in'
-AM_INIT_AUTOMAKE([subdir-objects])
+AM_INIT_AUTOMAKE([1.11 subdir-objects])
+AM_SILENT_RULES([yes])
 
 dnl Definitions for config.h
 AC_DEFINE([FUSE_UTILS_RC_VERSION], [fuse_utils_rc_version],
