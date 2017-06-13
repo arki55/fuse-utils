@@ -47,6 +47,12 @@ files.
 .\"
 .SH OPTIONS
 .TP
+.I \-s
+any snapshot found in the RZX file will be dumped to a file. The
+filename is the name of the RZX file, followed by the block number and
+the snapshot extension, e.g. `game_0.szx'. Unlike rzxtool, the snapshot
+is not processed by libspectrum and is extracted unaltered.
+.TP
 .IR \-h ", " \-\-help
 give brief usage help, listing available options.
 .TP
