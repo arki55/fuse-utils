@@ -1,5 +1,7 @@
 *~
 *.a
+*.orig
+*.reg
 /aclocal.m4
 /audio2tape
 /autom4te.cache
