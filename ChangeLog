@@ -1,3 +1,23 @@
+2017-07-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+
+        * Version 1.3.2 released
+
+        * rzxdump
+          * Allow extracting snapshot files (Sergio Baldoví).
+
+        * scl2trd
+          * Print error messages to stderr (Sergio Baldoví).
+
+        * Various minor bug fixes/improvements:
+          * Ignore .DS_Store files too (Fredrick Meunier).
+          * Check close()/fclose() return value on write operations (Sergio
+            Baldoví).
+          * Move write_file() into utils.c and share between utilities (Sergio
+            Baldoví).
+          * Also ignore *~ files (Fredrick Meunier).
+          * Switch to using autoreconf (Fredrick Meunier).
+          * Use silent builds by default (Fredrick Meunier).
+
 2016-11-05  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
         * Version 1.3.1 released
