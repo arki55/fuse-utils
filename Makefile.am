@@ -53,6 +53,7 @@ AM_CPPFLAGS = $(LIBSPECTRUM_CFLAGS) $(AUDIOFILE_CFLAGS) $(GLIB_CFLAGS)
 createhdf_SOURCES = ide.c createhdf.c
 
 fmfconv_SOURCES = fmfconv.c \
+		  fmfconv_compr.c \
 		  fmfconv_output/fmfconv_aiff.c \
 		  fmfconv_output/fmfconv_au.c \
 		  fmfconv_output/fmfconv_avi.c \
@@ -127,7 +128,7 @@ noinst_HEADERS = compat.h ide.h utils.h audio2tape.h importer/interpolator.h \
                  converter/findsync1.h converter/getpulse1.h \
                  converter/getpulse2.h converter/getsync2.h \
                  converter/romloader.h converter/romloaderstate.h \
-                 compat/getopt.h fmfconv.h movie_tables.h
+                 compat/getopt.h fmfconv.h fmfconv_compr.h movie_tables.h
 
 noinst_LIBRARIES =
 
