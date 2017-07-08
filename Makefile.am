@@ -53,24 +53,24 @@ AM_CPPFLAGS = $(LIBSPEC_CFLAGS) $(AUDIOFILE_CFLAGS) $(GLIB_CFLAGS)
 createhdf_SOURCES = ide.c createhdf.c
 
 fmfconv_SOURCES = fmfconv.c \
-		  fmfconv_avi.c \
-		  fmfconv_yuv.c \
-		  fmfconv_scr.c \
-		  fmfconv_ppm.c \
-		  fmfconv_wav.c \
-		  fmfconv_au.c \
-		  fmfconv_aiff.c
+		  fmfconv_output/fmfconv_aiff.c \
+		  fmfconv_output/fmfconv_au.c \
+		  fmfconv_output/fmfconv_avi.c \
+		  fmfconv_output/fmfconv_ppm.c \
+		  fmfconv_output/fmfconv_scr.c \
+		  fmfconv_output/fmfconv_wav.c \
+		  fmfconv_output/fmfconv_yuv.c
 
 if COMPAT_GETOPT
 fmfconv_SOURCES += compat/getopt.c compat/getopt1.c
 endif
 
 if HAVE_LIBJPEG
-fmfconv_SOURCES += fmfconv_jpg.c
+fmfconv_SOURCES += fmfconv_output/fmfconv_jpg.c
 endif
 
 if HAVE_LIBPNG
-fmfconv_SOURCES += fmfconv_png.c
+fmfconv_SOURCES += fmfconv_output/fmfconv_png.c
 endif
 
 fmfconv_LDADD = $(JPEG_LIBS) $(PNG_LIBS) compat/libcompatos.a
