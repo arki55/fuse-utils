@@ -215,7 +215,7 @@ AS_IF([test "$fakeglib" = no], [
     [GLIB],
     [glib-2.0 >= 2.0.0],
     [AC_DEFINE([HAVE_LIB_GLIB], 1, [Defined if we've got GLib])
-     LIBSPEC_LIBS="$LIBSPEC_LIBS $GLIB_LIBS"],
+      LIBSPECTRUM_LIBS="$LIBSPECTRUM_LIBS $GLIB_LIBS"],
     [AC_MSG_ERROR([GLib not found, and libspectrum has no internal replacement])]
   )
 ])
