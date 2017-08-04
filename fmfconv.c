@@ -973,9 +973,9 @@ open_inp( void )
 }
 
 static void
-setup_frame_wh( void )
+setup_frame_wh( libspectrum_byte screen_type )
 {
-  if( ( scr_t = fhead[5] ) == TYPE_HRE ) {	/* screen type => $ R C X */
+  if( ( scr_t = screen_type ) == TYPE_HRE ) {	/* screen type => $ R C X */
     if( frm_w != 640 ) {
       frm_w = 640; frm_h = 480;
       pix_yuv[1] = &pix_rgb[ 640 * 480 ];
@@ -1031,7 +1031,7 @@ check_fmf_head( void )
     return ERR_CORRUPT_INP;
   }
   frm_rte = fhead[4];				/* frame rate (1:#) */
-  setup_frame_wh();
+  setup_frame_wh( fhead[5] );
   frm_mch = fhead[6];				/* machine type */
 
   inp_fps = machine_timing[frm_mch - 'A'] / frm_rte;	/* real input fps * 1000 frame / 1000s */
@@ -1098,7 +1098,7 @@ fmf_read_frame_head( void )
     return ERR_CORRUPT_INP;
   }
 
-  setup_frame_wh();
+  setup_frame_wh( fhead[1] );
 
   if( frm_rte != fhead[0] || frm_mch != fhead[2] ) {	/* recalculate timings */
     frm_rte = fhead[0];				/* frame rate (1:#) */
