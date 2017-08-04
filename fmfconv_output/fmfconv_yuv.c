@@ -213,7 +213,7 @@ out_write_yuvheader( void )
 	    "YUV4MPEG2"
 	    " W%d H%d F%d:1000 Ip A%c:1 C%s\n", 
 	frm_w, frm_h, out_fps,
-	 ( scr_t == TYPE_HRE && 0 ? '2' : '1' ),
+	 ( scr_t == HIRES && 0 ? '2' : '1' ),
 	 yuv4mpeg2[yuv_t - TYPE_444] );
   out_header_ok = 1;
   printi( 1, "out_write_yuvheader(): W=%d H=%d F=%d:1000 A=%d\n", frm_w, frm_h,

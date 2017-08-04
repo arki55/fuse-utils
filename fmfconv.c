@@ -106,7 +106,8 @@ int fmfconv_stop = 0;
 FILE *inp_file = NULL, *out = NULL, *snd = NULL;
 int out_to_stdout = 0;
 
-type_t inp_t = TYPE_UNSET, out_t = TYPE_UNSET, snd_t = TYPE_UNSET, scr_t = TYPE_UNSET, prg_t = TYPE_NONE;
+type_t inp_t = TYPE_UNSET, out_t = TYPE_UNSET, snd_t = TYPE_UNSET, prg_t = TYPE_NONE;
+fmf_screen_type scr_t;
 
 const char *inp_name = NULL;
 const char *out_name = NULL;
@@ -975,7 +976,7 @@ open_inp( void )
 static void
 setup_frame_wh( libspectrum_byte screen_type )
 {
-  if( ( scr_t = screen_type ) == TYPE_HRE ) {	/* screen type => $ R C X */
+  if( ( scr_t = get_screen_type( screen_type ) ) == HIRES ) {	/* screen type => $ R C X */
     if( frm_w != 640 ) {
       frm_w = 640; frm_h = 480;
       pix_yuv[1] = &pix_rgb[ 640 * 480 ];
@@ -1021,11 +1022,7 @@ check_fmf_head( void )
     printe( "Wrong Frame rate '%d', sorry...\n", fhead[4] );
     return ERR_CORRUPT_INP;
   }
-  if( fhead[5] != TYPE_ZXS && fhead[5] != TYPE_TXS && fhead[5] != TYPE_HRE &&
-      fhead[5] != TYPE_HCO ) {
-    printe( "Unknown Screen$ type '%d', sorry...\n", fhead[5] );
-    return ERR_CORRUPT_INP;
-  }
+  get_screen_type( fhead[5] );
   if( fhead[6] < 'A' || fhead[6] > 'E' ) {
     printe( "Unknown Machine type '%d', sorry...\n", fhead[6] );
     return ERR_CORRUPT_INP;
@@ -1088,11 +1085,7 @@ fmf_read_frame_head( void )
     printe( "Wrong Frame rate '%d', sorry...\n", fhead[0] );
     return ERR_CORRUPT_INP;
   }
-  if( fhead[1] != TYPE_ZXS && fhead[1] != TYPE_TXS && fhead[1] != TYPE_HRE &&
-      fhead[1] != TYPE_HCO ) {
-    printe( "Unknown Screen$ type '%d', sorry...\n", fhead[1] );
-    return ERR_CORRUPT_INP;
-  }
+  get_screen_type( fhead[1] );
   if( fhead[2] < 'A' || fhead[2] > 'E' ) {
     printe( "Unknown Machine type '%d', sorry...\n", fhead[2] );
     return ERR_CORRUPT_INP;
@@ -1345,7 +1338,7 @@ fmf_read_screen( void )
   if( ( err = fmf_read_slice_blokk( zxscr + frm_slice_y * SCR_PITCH + frm_slice_x,
 			       frm_slice_w, frm_slice_h ) ) ) return err;	/* we store it with cont. */
 /* read bitmap2 if HighResolution Timex */
-  if( scr_t == TYPE_HRE && ( err = fmf_read_slice_blokk( zxscr + 9600 +
+  if( scr_t == HIRES && ( err = fmf_read_slice_blokk( zxscr + 9600 +
 			     frm_slice_y * SCR_PITCH + frm_slice_x,
 			     frm_slice_w, frm_slice_h ) ) ) return err;	/* we store it with cont. */
 /*read attrib */
@@ -1450,7 +1443,7 @@ out_2_pix( void )
 
   w = frm_slice_w;
   for( h = frm_slice_h; h > 0; h--, y++, w = frm_slice_w ) {
-    if( scr_t != TYPE_HRE )
+    if( scr_t != HIRES )
       idx = y * OUT_PITCH + x * 8 ;		/* 8pixel/data */
     else
       idx = y * OUT_PITCH * 2 + x * 16 ;	/* 16 pixel/data*/
@@ -1464,12 +1457,12 @@ out_2_pix( void )
     attr   = &attrs[SCR_PITCH * y + x];
     for( ; w > 0; w--, bitmap++, attr++ ) {
       int px, fx, ix = *attr;
-      int bits = scr_t == TYPE_HRE ? ( *bitmap << 8 ) + *(bitmap + 9600) : *bitmap;
+      int bits = scr_t == HIRES ? ( *bitmap << 8 ) + *(bitmap + 9600) : *bitmap;
 
       fx = ( ix & 0x80 ) * inv;
       px = ( ( ix & 0x38 ) >> 3 ) + ( ( ix & 0x40 ) ? 8 : 0 );
       ix = ( ix & 0x07 ) + ( ( ix & 0x40 ) ? 8 : 0 );
-      for( i = scr_t == TYPE_HRE ? 16 : 8; i > 0; i-- ) {
+      for( i = scr_t == HIRES ? 16 : 8; i > 0; i-- ) {
         pix_pix( &idx, ( bits ^ fx ) & 128 ? ix : px, i );
         bits <<= 1;
       }

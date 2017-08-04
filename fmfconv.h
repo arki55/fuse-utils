@@ -24,6 +24,10 @@
 #ifndef FMFCONV_H
 #define FMFCONV_H
 
+#include <libspectrum.h>
+
+#include "fmfconv_types.h"
+
 #define FMFCONV_VER_MAJOR 0
 #define FMFCONV_VER_MINOR 5
 #define FMFCONV_RC_VERSION FMFCONV_VER_MAJOR,FMFCONV_VER_MINOR,0,0
@@ -110,11 +114,6 @@ typedef enum {
   TYPE_CUTFROM,
   TYPE_CUT,
 
-  TYPE_ZXS = '$',	/* screen type $ -> normal Spectrum */
-  TYPE_TXS = 'X',	/* X -> Timex normal */
-  TYPE_HRE = 'R',	/* R -> Timex HighRes */
-  TYPE_HCO = 'C',	/* C -> Timex HiColor */
-
   TYPE_PCM = 'P',	/* 16 bit signed PCM */
   TYPE_ALW = 'A',	/* 8 bit signed A-Law */
   TYPE_ULW = 'U',	/* 8 bit signed u-Law */
@@ -135,7 +134,8 @@ extern int frm_w, frm_h;
 extern int frm_fps, frm_mch;
 extern libspectrum_qword output_no;	/* output frame no */
 
-extern type_t scr_t, yuv_t, out_t, snd_t;
+extern type_t yuv_t, out_t, snd_t;
+fmf_screen_type scr_t;
 
 extern const char *out_name;
 extern int out_w, out_h;
