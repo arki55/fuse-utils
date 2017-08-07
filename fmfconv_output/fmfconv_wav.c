@@ -74,9 +74,9 @@ snd_write_wavheader( void )
 
   fwrite( "RIFF\377\377\377\377WAVEfmt ", 16, 1, snd );
 
-  if( snd_enc == TYPE_PCM )
+  if( snd_enc == PCM )
     fwrite( "\020\000\000\000\001\000", 6, 1, snd );	/* PCM */
-  else if( snd_enc == TYPE_ALW )
+  else if( snd_enc == ALW )
     fwrite( "\022\000\000\000\006\000", 6, 1, snd );	/* A-Law */
   else
     fwrite( "\022\000\000\000\007\000", 6, 1, snd );	/* u-Law */
@@ -96,7 +96,7 @@ snd_write_wavheader( void )
   buff[0] = snd_fsz & 0xff; buff[1] = snd_fsz >> 8; buff[2] = snd_fsz / snd_chn * 8; buff[3] = 0;
   fwrite( buff, 4, 1, snd );			/* frame size + bits/sample */
 
-  if( snd_enc != TYPE_PCM )
+  if( snd_enc != PCM )
     fwrite( "\000\000fact\004\000\000\000\377\377\377\377", 14, 1, snd );/*  */
 
   fwrite( "data\377\377\377\377", 8, 1, snd );/* data Chunk header */
@@ -112,7 +112,7 @@ snd_write_wav( void )
   int err;
 
   if( !snd_header_ok && ( err = snd_write_wavheader() ) ) return err;
-  if( snd_enc == TYPE_PCM && !snd_little_endian ) {	/* we have to swap all sample */
+  if( snd_enc == PCM && !snd_little_endian ) {	/* we have to swap all sample */
     pcm_swap_endian();
   }
 
@@ -141,7 +141,7 @@ snd_finalize_wav( void )
     buff[2] = ( pos >> 16 ) & 0xff; buff[3] = pos >> 24;
     fwrite( buff, 4, 1, snd );			/* set file length - 8 */
 
-    if( snd_enc == TYPE_PCM ) {
+    if( snd_enc == PCM ) {
       dsz -= 44;
       fseek( snd, WAV_POS_PCMLEN, SEEK_SET );
     } else {
@@ -151,7 +151,7 @@ snd_finalize_wav( void )
     buff[0] = dsz & 0xff; buff[1] = ( dsz >> 8 ) & 0xff;
     buff[2] = ( dsz >> 16 ) & 0xff; buff[3] = dsz >> 24;
     fwrite( buff, 4, 1, snd );			/* set data size */
-    if( snd_enc != TYPE_PCM ) {
+    if( snd_enc != PCM ) {
       fseek( snd, WAV_POS_SAMPLES, SEEK_SET );
       fwrite( buff, 4, 1, snd );			/* set sample num (1 byte/sample) */
     }

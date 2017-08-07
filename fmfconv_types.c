@@ -50,3 +50,51 @@ get_screen_type(libspectrum_byte screen_type)
 
   return retval;
 }
+
+fmf_sound_type
+get_sound_type( int sound_type )
+{
+  fmf_sound_type retval;
+
+  switch(sound_type) {
+  case 'P':
+    retval = PCM;
+    break;
+  case 'A':
+    retval = ALW;
+    break;
+  case 'U':
+    retval = ULW;
+    break;
+  default:
+    printe( "Unknown sound_type:%x\n", sound_type );
+    exit( -1 );
+    break;
+  }
+
+  return retval;
+}
+
+const char*
+get_sound_type_string( fmf_sound_type sound_type )
+{
+  const char *retval;
+
+  switch( sound_type ) {
+  case PCM:
+    retval = "PCM";
+    break;
+  case ALW:
+    retval = "ALAW";
+    break;
+  case ULW:
+    retval = "ULAW";
+    break;
+  default:
+    printe( "Unknown sound_type:%x\n", sound_type );
+    exit(-1);
+    break;
+  }
+
+  return retval;
+}

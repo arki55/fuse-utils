@@ -34,6 +34,15 @@ typedef enum {
   STANDARD_TIMEX	/* X -> Timex normal */
 } fmf_screen_type;
 
-fmf_screen_type get_screen_type(libspectrum_byte screen_type);
+fmf_screen_type get_screen_type( libspectrum_byte screen_type );
+
+typedef enum {
+  PCM,
+  ALW,
+  ULW
+} fmf_sound_type;
+
+fmf_sound_type get_sound_type( int sound_type );
+const char* get_sound_type_string( fmf_sound_type sound_type );
 
 #endif	/* FMFCONV_TYPES_H */

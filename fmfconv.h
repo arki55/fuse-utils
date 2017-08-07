@@ -114,10 +114,6 @@ typedef enum {
   TYPE_CUTFROM,
   TYPE_CUT,
 
-  TYPE_PCM = 'P',	/* 16 bit signed PCM */
-  TYPE_ALW = 'A',	/* 8 bit signed A-Law */
-  TYPE_ULW = 'U',	/* 8 bit signed u-Law */
-
   TYPE_MONO= 'M',
   TYPE_STEREO='S',
 
@@ -135,7 +131,7 @@ extern int frm_fps, frm_mch;
 extern libspectrum_qword output_no;	/* output frame no */
 
 extern type_t yuv_t, out_t, snd_t;
-fmf_screen_type scr_t;
+extern fmf_screen_type scr_t;
 
 extern const char *out_name;
 extern int out_w, out_h;
@@ -147,7 +143,7 @@ extern int out_chn, out_rte, out_fsz, out_len;
 extern libspectrum_signed_byte *sound8;	/* sound buffer for x-law */
 extern libspectrum_signed_word *sound16;	/* sound buffer for pcm */
 
-extern type_t snd_enc;				/* sound type (pcm/alaw/ulaw) */
+extern fmf_sound_type snd_enc;			/* sound type (pcm/alaw/ulaw) */
 extern int snd_rte, snd_chn, snd_fsz, snd_len;	/* sound rate (Hz), sound channels (1/2), sound length in byte  */
 extern int snd_header_ok;			/* sound header ok? */
 extern int snd_little_endian;

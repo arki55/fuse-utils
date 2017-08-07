@@ -207,7 +207,7 @@ libspectrum_qword fmf_sound_no = 0;
 
 /* sound variables */
 #define SOUND_BUFF_MAX_SIZE 65536	/* soft max size of collected sound samples */
-type_t snd_enc;				/* sound type (pcm/alaw) */
+fmf_sound_type snd_enc;			/* sound type (pcm/alaw) */
 int snd_rte, snd_chn, snd_fsz, snd_len;	/* sound rate (Hz), sound channels (1/2), sound length in byte  */
 int snd_frg = 0;			/* sound fragment len from previous resample in bytes */
 int snd_header_ok = 0;			/* sound header ok? */
@@ -348,7 +348,7 @@ law_2_pcm( void )
 #else
   snd_little_endian = 1;
 #endif
-  snd_enc = TYPE_PCM;
+  snd_enc = PCM;
   snd_fsz <<= 1;		/* 1byte -> 2byte */
   snd_len <<= 1;		/* 1byte -> 2byte */
 
@@ -382,7 +382,7 @@ mono_2_stereo( void )
 
   if( ( err = alloc_sound_buff( snd_len * 2 ) ) ) return err;
 
-  if( snd_enc == TYPE_PCM ) {
+  if( snd_enc == PCM ) {
     libspectrum_signed_word *s;
     libspectrum_signed_word *t;
     for( s = sound16 + snd_len / 2 - 1, t = sound16 + snd_len - 1 ;
@@ -419,7 +419,7 @@ stereo_2_mono( void )
 /* we have to skip resample fragment space */
   sound8 += snd_frg;
   sound16 = (void *)sound8;
-  if( snd_enc == TYPE_PCM ) {
+  if( snd_enc == PCM ) {
     libspectrum_signed_word *s;
     libspectrum_signed_word *t;
     buff_end = sound16 + snd_len / 2;
@@ -482,7 +482,7 @@ resample_sound( void )
     memmove( snd8_r, sound8 + snd_frg, snd_len );
     snd16_r = (void *)snd8_r;
 
-    if( snd_enc == TYPE_PCM )
+    if( snd_enc == PCM )
       snd16_w += snd_cpy * snd_chn;
     else
       snd8_w += snd_cpy * snd_chn;
@@ -495,13 +495,13 @@ resample_sound( void )
     if( snd_cpy ) { /*   [----    ######] [lrlrlr]  */
       int n = snd_cpy + 1;
 
-      if( snd_enc == TYPE_PCM )
+      if( snd_enc == PCM )
         snd16_w -= snd_cpy * snd_chn;
       else
         snd8_w -= snd_cpy * snd_chn;
 
       while( snd_cpy ) {
-        if( snd_enc == TYPE_PCM ) {
+        if( snd_enc == PCM ) {
           *snd16_w = last_l + (*snd16_r - last_l) * (n - snd_cpy) / n;
           snd16_w++;
         } else {
@@ -509,7 +509,7 @@ resample_sound( void )
           snd8_w++;
         }
         if( snd_chn == 2 ) {
-          if( snd_enc == TYPE_PCM ) {
+          if( snd_enc == PCM ) {
             *snd16_w = last_r + (*(snd16_r+1) - last_r) * (n - snd_cpy) / n;
             snd16_w++;
           } else {
@@ -521,7 +521,7 @@ resample_sound( void )
       }
     }
     while( fmf_rte <= 0 ) {
-      if( snd_enc == TYPE_PCM ) {
+      if( snd_enc == PCM ) {
         if( snd16_w != snd16_r )
           *snd16_w = *snd16_r; /* really we do not need to store copies ... */
         snd16_w++;
@@ -531,7 +531,7 @@ resample_sound( void )
         snd8_w++;
       }
       if( snd_chn == 2 ) {
-        if( snd_enc == TYPE_PCM ) {
+        if( snd_enc == PCM ) {
           if( snd16_w != snd16_r + 1 )
             *snd16_w = *(snd16_r + 1);
           snd16_w++;
@@ -544,7 +544,7 @@ resample_sound( void )
       fmf_rte += snd_rte;
       snd_cpy++;
     }
-    if( snd_enc == TYPE_PCM ) {
+    if( snd_enc == PCM ) {
       last_l = last_r = *snd16_r;
       snd16_r++;
     } else {
@@ -552,7 +552,7 @@ resample_sound( void )
       snd8_r++;
     }
     if( snd_chn == 2 ) {
-      if( snd_enc == TYPE_PCM ) {
+      if( snd_enc == PCM ) {
         last_r = *snd16_r;
         snd16_r++;
       } else {
@@ -564,7 +564,7 @@ resample_sound( void )
     if( snd_cpy ) snd_cpy--;
   }
   snd_frg = snd_cpy * snd_fsz;
-  new_len = ( snd_enc == TYPE_PCM ? (void *)snd16_w : (void *)snd8_w ) -
+  new_len = ( snd_enc == PCM ? (void *)snd16_w : (void *)snd8_w ) -
             (void *)sound8;
   new_len -= snd_frg;
   printi( 3, "resample_sound(): %d sample converted to %ld (%dHz -> %dHz)\n",
@@ -1048,11 +1048,11 @@ check_fmf_head( void )
     return ERR_CORRUPT_INP;
   }
 
-  snd_enc = fhead[7];		/* P U A */
+  snd_enc = get_sound_type( fhead[7] );		/* P U A */
   snd_rte = fhead[8] + ( fhead[9] << 8 );
   snd_chn = fhead[10] == TYPE_STEREO ? 2 : 1;
-  snd_fsz = ( snd_enc == TYPE_PCM ? 2 : 1 ) * snd_chn;
-  if( snd_enc == TYPE_PCM ) snd_little_endian = fmf_little_endian;
+  snd_fsz = ( snd_enc == PCM ? 2 : 1 ) * snd_chn;
+  if( snd_enc == PCM ) snd_little_endian = fmf_little_endian;
 
   if( sound_raw || out_rte == -1 ) out_rte = snd_rte;
   if( sound_raw ) out_chn = snd_chn;
@@ -1061,8 +1061,8 @@ check_fmf_head( void )
           fmf_little_endian ? "little" : "big", fmf_compr ? "" : "un" );
   printi( 1, "check_fmf_head(): video: frame rate = 1:%d frame time: %dus %s machine timing.\n", frm_rte, machine_ftime[frm_mch - 'A'],
           machine_name[frm_mch - 'A'] );
-  printi( 1, "check_fmf_head(): audio: sampling rate %dHz %c encoded %s sound.\n",
-          snd_rte, snd_enc, snd_chn == 2 ? "stereo" : "mono" );
+  printi( 1, "check_fmf_head(): audio: sampling rate %dHz %s encoded %s sound.\n",
+          snd_rte, get_sound_type_string( snd_enc ), snd_chn == 2 ? "stereo" : "mono" );
   return 0;
 }
 
@@ -1155,7 +1155,7 @@ fmf_read_sound( void )
     return ERR_CORRUPT_INP;
   }
 
-  if( snd_len && ( snd_enc != fhead[0] ||		/* encoding change */
+  if( snd_len && ( snd_enc != get_sound_type( fhead[0] ) ||		/* encoding change */
 		snd_rte != fhead[1] + ( fhead[2] << 8 ) || /* sampling rate change */
 		snd_chn != ( fhead[3] == TYPE_STEREO ? 2 : 1 ) ) ) { /* channels change */
     printi( 3, "fmf_read_sound(): sound parameters changed flush sound buffer\n" );
@@ -1164,10 +1164,10 @@ fmf_read_sound( void )
   }
 
   fmf_snd_head_read = 0;
-  snd_enc = fhead[0];		/* P U A */
+  snd_enc = get_sound_type( fhead[0] );		/* P U A */
   snd_rte = fhead[1] + ( fhead[2] << 8 );
   snd_chn = fhead[3] == TYPE_STEREO ? 2 : 1;
-  snd_fsz = ( snd_enc == TYPE_PCM ? 2 : 1 ) * snd_chn;
+  snd_fsz = ( snd_enc == PCM ? 2 : 1 ) * snd_chn;
   len = ( fhead[4] + ( fhead[5] << 8 ) + 1 ) * snd_fsz;
 
   if( sound_stereo == -1 ) out_chn = snd_chn;
@@ -1183,7 +1183,7 @@ fmf_read_sound( void )
     do_now = DO_SOUND;
     return 0;
   }
-  printi( 3, "fmf_read_sound(): %s %dHz %c encoded %s %d samples (%d bytes) sound\n", cut_cut ? "skip" : "store", snd_rte, snd_enc,
+  printi( 3, "fmf_read_sound(): %s %dHz %s encoded %s %d samples (%d bytes) sound\n", cut_cut ? "skip" : "store", snd_rte, get_sound_type_string( snd_enc ),
 		 snd_chn == 2 ? "stereo" : "mono", len/snd_fsz, len );
   return 0;
 }
@@ -1195,7 +1195,7 @@ snd_write_sound( void )
 
   if( snd_len <= 0 ) return 0;
 
-  if( snd_enc != TYPE_PCM && sound_pcm && ( err = law_2_pcm() ) ) return err;
+  if( snd_enc != PCM && sound_pcm && ( err = law_2_pcm() ) ) return err;
   if( snd_chn == 2 && sound_stereo == 0 && ( err = stereo_2_mono() ) ) return err;
   if( ( snd_rte != out_rte || snd_frg ) && ( err = resample_sound() ) ) return err;
   if( snd_chn == 1 && sound_stereo == 1 && ( err = mono_2_stereo() ) ) return err;
@@ -1230,9 +1230,9 @@ fmf_gen_sound( void )
   len = len / 1000000;
 
   if( ( err = alloc_sound_buff( snd_len + len ) ) ) return err;
-  memset((void *)( sound8 + snd_len ), snd_enc == 'P' ? 0 : 0xd5, len);	/* only A-Law!!!*/
+  memset((void *)( sound8 + snd_len ), snd_enc == PCM ? 0 : 0xd5, len);	/* only A-Law!!!*/
   snd_len += len;
-  printi( 3, "fmf_gen_sound(): store %dHz %c encoded %s %d samples (%d bytes) silence\n", snd_rte, snd_enc,
+  printi( 3, "fmf_gen_sound(): store %dHz %s encoded %s %d samples (%d bytes) silence\n", snd_rte, get_sound_type_string( snd_enc ),
 		 snd_chn == 2 ? "stereo" : "mono", (int)len/snd_fsz, (int)len );
   if( snd_len >= SOUND_BUFF_MAX_SIZE ) {
     if( ( err = snd_write_sound() ) ) return err;

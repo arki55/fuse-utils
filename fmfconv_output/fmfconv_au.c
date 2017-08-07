@@ -49,7 +49,7 @@ snd_write_auheader( void )
   buff[0] = swap_endian_dword( 0x2e736e64UL );		/* magic id */
   buff[1] = swap_endian_dword( 24 + 64 );
   buff[2] = swap_endian_dword( ~0U );
-  buff[3] = swap_endian_dword( snd_enc == TYPE_PCM ? 3 : ( snd_enc == TYPE_ULW ? 1 : 27 ) );
+  buff[3] = swap_endian_dword( snd_enc == PCM ? 3 : ( snd_enc == ULW ? 1 : 27 ) );
   buff[4] = swap_endian_dword( out_rte );
   buff[5] = swap_endian_dword( snd_chn );
 #endif
@@ -76,7 +76,7 @@ snd_write_au( void )
 
   if( !snd_header_ok && ( err = snd_write_auheader() ) ) return err;
 
-  if( snd_enc == TYPE_PCM && snd_little_endian ) {	/* we have to swap all sample */
+  if( snd_enc == PCM && snd_little_endian ) {	/* we have to swap all sample */
     pcm_swap_endian();
   }
   if( fwrite( sound8, snd_len, 1, snd ) != 1 ) return ERR_WRITE_SND;

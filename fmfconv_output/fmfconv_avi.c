@@ -194,7 +194,7 @@ out_write_aviheader( void )
   WSTRING( "strh" ); WDWORD( 0x038 ); WSTRING( "auds" );
 
 /* (dw)fccHandler */
-  WDWORD( snd_enc == TYPE_PCM ? 1 : ( snd_enc == TYPE_ALW ? 0x06 : 0x07 ) );
+  WDWORD( snd_enc == PCM ? 1 : ( snd_enc == ALW ? 0x06 : 0x07 ) );
 /* dwFlags, wPriority, wLanguage, dwInitialFrames */
   WDWORD( 0 ); W2WORD( 0, 0 ); WDWORD( 0 );
 
@@ -209,7 +209,7 @@ out_write_aviheader( void )
 /* stream format (dw)biSize */
   WSTRING( "strf" ); WDWORD( 0x010 );
 /*   wFormatTag, (w)nChannels, (dw)nSamplesPerSec, (dw)nAvgBytesPerSec */
-  W2WORD( snd_enc == TYPE_PCM ? 1 : ( snd_enc == TYPE_ALW ? 0x06 : 0x07 ), out_chn );
+  W2WORD( snd_enc == PCM ? 1 : ( snd_enc == ALW ? 0x06 : 0x07 ), out_chn );
   W2DWORD( out_rte, out_rte * snd_fsz / snd_chn );
 
 /* (w)nBlockAlign, wBitsPerSample */
@@ -323,7 +323,7 @@ snd_write_avi( void )
     return err;
 
   /* we have to swap all samples */
-  if( snd_enc == TYPE_PCM && !snd_little_endian ) {
+  if( snd_enc == PCM && !snd_little_endian ) {
     pcm_swap_endian();
   }
 

@@ -96,7 +96,7 @@ snd_write_aiffheader( void )
 {
   libspectrum_byte buff[10];
 
-  if( force_aifc || snd_enc != TYPE_PCM ) aifc = 1;		/* AIFF or AIFC */
+  if( force_aifc || snd_enc != PCM ) aifc = 1;		/* AIFF or AIFC */
 
   if( aifc )
     fwrite( "FORM\377\377\377\377AIFCCOMM\000\000\000\046", 20, 1, snd );
@@ -109,7 +109,7 @@ snd_write_aiffheader( void )
     fwrite( "\000\001", 2, 1, snd );			/* Mono */
 
   fwrite( "\377\377\377\377", 4, 1, snd );			/* Stereo */
-  if( snd_enc == TYPE_PCM )
+  if( snd_enc == PCM )
     fwrite( "\000\020", 2, 1, snd );/* 16 bit/ sample */
   else
     fwrite( "\000\010", 2, 1, snd );/* 8 bit/ sample */
@@ -121,9 +121,9 @@ snd_write_aiffheader( void )
    ulaw uLaw 2:1.......
    alaw aLaw 2:1....... */
   if( aifc ) {
-    if( snd_enc == TYPE_PCM )
+    if( snd_enc == PCM )
       fwrite( "NONE\020not compressed ", 20, 1, snd );	/* PCM */
-    else if( snd_enc == TYPE_ALW )
+    else if( snd_enc == ALW )
       fwrite( "alaw\020aLaw 2:1       ", 20, 1, snd );	/* A-Law */
     else
       fwrite( "ulaw\020uLaw 2:1       ", 20, 1, snd );	/* u-Law */
@@ -142,7 +142,7 @@ snd_write_aiff( void )
   int err;
 
   if( !snd_header_ok && ( err = snd_write_aiffheader() ) ) return err;
-  if( snd_enc == TYPE_PCM && snd_little_endian ) {	/* we have to swap all sample */
+  if( snd_enc == PCM && snd_little_endian ) {	/* we have to swap all sample */
     pcm_swap_endian();
   }
 
