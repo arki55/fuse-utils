@@ -114,8 +114,6 @@ typedef enum {
   TYPE_CUTFROM,
   TYPE_CUT,
 
-  TYPE_MONO= 'M',
-  TYPE_STEREO='S',
 
 
 } type_t;

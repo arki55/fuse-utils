@@ -1050,7 +1050,7 @@ check_fmf_head( void )
 
   snd_enc = get_sound_type( fhead[7] );		/* P U A */
   snd_rte = fhead[8] + ( fhead[9] << 8 );
-  snd_chn = fhead[10] == TYPE_STEREO ? 2 : 1;
+  snd_chn = get_sound_channels_count( fhead[10] );
   snd_fsz = ( snd_enc == PCM ? 2 : 1 ) * snd_chn;
   if( snd_enc == PCM ) snd_little_endian = fmf_little_endian;
 
@@ -1157,7 +1157,7 @@ fmf_read_sound( void )
 
   if( snd_len && ( snd_enc != get_sound_type( fhead[0] ) ||		/* encoding change */
 		snd_rte != fhead[1] + ( fhead[2] << 8 ) || /* sampling rate change */
-		snd_chn != ( fhead[3] == TYPE_STEREO ? 2 : 1 ) ) ) { /* channels change */
+		snd_chn != get_sound_channels_count( fhead[3] ) ) ) { /* channels change */
     printi( 3, "fmf_read_sound(): sound parameters changed flush sound buffer\n" );
     do_now = DO_SOUND_FLUSH;
     return 0;
@@ -1166,7 +1166,7 @@ fmf_read_sound( void )
   fmf_snd_head_read = 0;
   snd_enc = get_sound_type( fhead[0] );		/* P U A */
   snd_rte = fhead[1] + ( fhead[2] << 8 );
-  snd_chn = fhead[3] == TYPE_STEREO ? 2 : 1;
+  snd_chn = get_sound_channels_count( fhead[3] );
   snd_fsz = ( snd_enc == PCM ? 2 : 1 ) * snd_chn;
   len = ( fhead[4] + ( fhead[5] << 8 ) + 1 ) * snd_fsz;
 

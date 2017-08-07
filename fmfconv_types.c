@@ -98,3 +98,30 @@ get_sound_type_string( fmf_sound_type sound_type )
 
   return retval;
 }
+
+fmf_sound_channels_type
+get_sound_channels_type( int sound_channels_type )
+{
+  fmf_sound_channels_type retval;
+
+  switch( sound_channels_type ) {
+  case 'S':
+    retval = STEREO;
+    break;
+  case 'M':
+    retval = MONO;
+    break;
+  default:
+    printe( "Unknown sound_channels_type:%c\n", sound_channels_type );
+    exit(-1);
+    break;
+  }
+
+  return retval;
+}
+
+int
+get_sound_channels_count( int sound_channels_type )
+{
+  return get_sound_channels_type( sound_channels_type ) == STEREO ? 2 : 1;
+}

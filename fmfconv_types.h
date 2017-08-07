@@ -45,4 +45,12 @@ typedef enum {
 fmf_sound_type get_sound_type( int sound_type );
 const char* get_sound_type_string( fmf_sound_type sound_type );
 
+typedef enum {
+  STEREO,
+  MONO
+} fmf_sound_channels_type;
+
+fmf_sound_channels_type get_sound_channels_type( int sound_channels_type );
+int get_sound_channels_count( int sound_channels_type );
+
 #endif	/* FMFCONV_TYPES_H */
