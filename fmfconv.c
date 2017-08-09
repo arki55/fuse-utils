@@ -1023,11 +1023,6 @@ check_fmf_head( void )
     printe( "Wrong Frame rate '%d', sorry...\n", fhead[4] );
     return ERR_CORRUPT_INP;
   }
-  get_screen_type( fhead[5] );
-  if( fhead[6] < 'A' || fhead[6] > 'E' ) {
-    printe( "Unknown Machine type '%d', sorry...\n", fhead[6] );
-    return ERR_CORRUPT_INP;
-  }
   frm_rte = fhead[4];				/* frame rate (1:#) */
   setup_frame_wh( fhead[5] );
   frm_mch = get_machine_type( fhead[6] );	/* machine type */
@@ -1036,16 +1031,8 @@ check_fmf_head( void )
   if( out_fps <= 0 ) out_fps = inp_fps;	/* later may change */
 
 /* Check initial sound parameters */
-  if( fhead[7] != 'P' && fhead[7] != 'A' ) {
-    printe( "Unknown FMF sound encoding type '%d', sorry...\n", fhead[7] );
-    return ERR_CORRUPT_INP;
-  }
   if( fhead[8] + ( fhead[9] << 8 ) < 1 ) {
     printe( "Wrong FMF sound rate '%d', sorry...\n", fhead[8] + ( fhead[9] << 8 ) );
-    return ERR_CORRUPT_INP;
-  }
-  if( fhead[10] != 'M' && fhead[10] != 'S' ) {
-    printe( "Unknown FMF sound channels type '%d', sorry...\n", fhead[10] );
     return ERR_CORRUPT_INP;
   }
 
