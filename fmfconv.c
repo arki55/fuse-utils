@@ -189,7 +189,8 @@ libspectrum_qword time_sec = 0, time_frm = 0;	/* current time (input) no */
 libspectrum_qword drop_no = 0;	/* dropped frame no */
 libspectrum_qword dupl_no = 0;	/* duplicated frame no */
 libspectrum_qword output_no = 0;	/* output frame no */
-int frm_scr = 0, frm_rte = 0, frm_mch = 0; /* screen type, frame rate, machine type (A/B/C/D) */
+int frm_scr = 0, frm_rte = 0; /* screen type, frame rate */
+fmf_machine_type frm_mch; /* machine type (A/B/C/D) */
 int frm_slice_x, frm_slice_y, frm_slice_w, frm_slice_h;
 int frm_w = -1, frm_h = -1;
 
@@ -1029,9 +1030,9 @@ check_fmf_head( void )
   }
   frm_rte = fhead[4];				/* frame rate (1:#) */
   setup_frame_wh( fhead[5] );
-  frm_mch = fhead[6];				/* machine type */
+  frm_mch = get_machine_type( fhead[6] );	/* machine type */
 
-  inp_fps = machine_timing[frm_mch - 'A'] / frm_rte;	/* real input fps * 1000 frame / 1000s */
+  inp_fps = machine_timing[frm_mch] / frm_rte;	/* real input fps * 1000 frame / 1000s */
   if( out_fps <= 0 ) out_fps = inp_fps;	/* later may change */
 
 /* Check initial sound parameters */
@@ -1059,8 +1060,8 @@ check_fmf_head( void )
   do_now = DO_SLICE;
   printi( 1, "check_fmf_head(): file:  FMF V1 %s endian %scompressed.\n",
           fmf_little_endian ? "little" : "big", fmf_compr ? "" : "un" );
-  printi( 1, "check_fmf_head(): video: frame rate = 1:%d frame time: %dus %s machine timing.\n", frm_rte, machine_ftime[frm_mch - 'A'],
-          machine_name[frm_mch - 'A'] );
+  printi( 1, "check_fmf_head(): video: frame rate = 1:%d frame time: %dus %s machine timing.\n", frm_rte, machine_ftime[frm_mch],
+          machine_name[frm_mch] );
   printi( 1, "check_fmf_head(): audio: sampling rate %dHz %s encoded %s sound.\n",
           snd_rte, get_sound_type_string( snd_enc ), snd_chn == 2 ? "stereo" : "mono" );
   return 0;
@@ -1093,21 +1094,21 @@ fmf_read_frame_head( void )
 
   setup_frame_wh( fhead[1] );
 
-  if( frm_rte != fhead[0] || frm_mch != fhead[2] ) {	/* recalculate timings */
+  if( frm_rte != fhead[0] || frm_mch != get_machine_type( fhead[2] ) ) {	/* recalculate timings */
     frm_rte = fhead[0];				/* frame rate (1:#) */
-    frm_mch = fhead[2];				/* machine type */
-    inp_fps = machine_timing[frm_mch - 'A'] / frm_rte;	/* real input fps * 1000 frame / 1000s */
+    frm_mch = get_machine_type( fhead[2] );	/* machine type */
+    inp_fps = machine_timing[frm_mch] / frm_rte;	/* real input fps * 1000 frame / 1000s */
     if( out_fps <= 0 ) out_fps = inp_fps;	/* later may change */
   }
   do_now = DO_SLICE;
   frame_no++;
-  time_frm += machine_ftime[frm_mch - 'A'] * frm_rte;
+  time_frm += machine_ftime[frm_mch] * frm_rte;
   while( time_frm >= 1000000 ) {
     time_frm -= 1000000;
     time_sec++;
   }
   printi( 2, "fmf_read_frame_head(): rate = 1:%d frame time: %dus %s machine.\n",
-          frm_rte, machine_ftime[frm_mch - 'A'], machine_name[frm_mch - 'A'] );
+          frm_rte, machine_ftime[frm_mch], machine_name[frm_mch] );
   return 0;
 }
 
@@ -1225,7 +1226,7 @@ fmf_gen_sound( void )
   if( snd_t == TYPE_NONE ) return 0;
 
 /* spectrum frame length * frame rate * freq * framesize 20000 * 9 * 64000 * 4 ~ 5*10^10 so we need 64bit! */
-  len = (libspectrum_qword)len_frag + (libspectrum_qword)machine_ftime[frm_mch - 'A'] * frm_rte * snd_rte * snd_fsz;
+  len = (libspectrum_qword)len_frag + (libspectrum_qword)machine_ftime[frm_mch] * frm_rte * snd_rte * snd_fsz;
   len_frag = len - (len / 1000000) * 1000000;
   len = len / 1000000;
 

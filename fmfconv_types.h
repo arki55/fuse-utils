@@ -53,4 +53,14 @@ typedef enum {
 fmf_sound_channels_type get_sound_channels_type( int sound_channels_type );
 int get_sound_channels_count( int sound_channels_type );
 
+typedef enum {
+  SPECTRUM_48K_LIKE,
+  SPECTRUM_128K_LIKE,
+  TS2068_LIKE,
+  PENTAGON_LIKE,
+  SPECTRUM_NTSC_LIKE
+} fmf_machine_type;
+
+fmf_machine_type get_machine_type( int machine_type );
+
 #endif	/* FMFCONV_TYPES_H */

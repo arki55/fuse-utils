@@ -125,7 +125,8 @@ extern int out_to_stdout;
 
 extern int frm_slice_x, frm_slice_y, frm_slice_w, frm_slice_h;
 extern int frm_w, frm_h;
-extern int frm_fps, frm_mch;
+extern int frm_fps;
+extern fmf_machine_type frm_mch;
 extern libspectrum_qword output_no;	/* output frame no */
 
 extern type_t yuv_t, out_t, snd_t;

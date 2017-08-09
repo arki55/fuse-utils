@@ -125,3 +125,33 @@ get_sound_channels_count( int sound_channels_type )
 {
   return get_sound_channels_type( sound_channels_type ) == STEREO ? 2 : 1;
 }
+
+fmf_machine_type
+get_machine_type( int machine_type )
+{
+  fmf_machine_type retval;
+
+  switch(machine_type) {
+  case 'A':
+    retval = SPECTRUM_48K_LIKE;
+    break;
+  case 'B':
+    retval = SPECTRUM_128K_LIKE;
+    break;
+  case 'C':
+    retval = TS2068_LIKE;
+    break;
+  case 'D':
+    retval = PENTAGON_LIKE;
+    break;
+  case 'E':
+    retval = SPECTRUM_NTSC_LIKE;
+    break;
+  default:
+    printe( "Unknown Machine type '%c', sorry...\n", machine_type );
+    exit(-1);
+    break;
+  }
+
+  return retval;
+}
