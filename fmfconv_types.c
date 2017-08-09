@@ -65,7 +65,6 @@ get_sound_type( int sound_type )
     break;
   case 'U':
     retval = ULW;
-    break;
   default:
     printe( "Unknown sound_type:%x\n", sound_type );
     exit( -1 );
@@ -112,7 +111,7 @@ get_sound_channels_type( int sound_channels_type )
     retval = MONO;
     break;
   default:
-    printe( "Unknown sound_channels_type:%c\n", sound_channels_type );
+    printe( "Unknown FMF sound channels type '%d', sorry...\n", sound_channels_type );
     exit(-1);
     break;
   }
