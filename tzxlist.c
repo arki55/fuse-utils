@@ -22,65 +22,6 @@
 
    E-mail: philip-fuse@shadowmagic.org.uk
 
-
-
-   some info about the standard tape header label
-~~ zakboekje zx spectrum  page 100,101,102 ~~
-   http://www.worldofspectrum.org/faq/reference/48kreference.htm#TapeDataStructure
-   Within each block, the data has the following structure:
-
-    A flag byte: this is 0x00 for header blocks and 0xff for data blocks.
-    The actual data.
-    A checksum byte, calculated such that XORing all the data bytes together (including the flag byte) produces 0x00.
-
-The structure of the 17 byte tape header is as follows.
-
-Byte    Length  Description
----------------------------
-0       1       Type (0,1,2 or 3)
-1       10      Filename (padded with blanks)
-11      2       Length of data block
-13      2       Parameter 1
-15      2       Parameter 2
-
-These 17 bytes are prefixed by the flag byte (0x00) and suffixed by the checksum byte to produce the 19 byte block seen on tape. The type is 0,1,2 or 3 for a PROGRAM, Number array, Character array or CODE file. A SCREEN$ file is regarded as a CODE file with start address 16384 and length 6912 decimal. If the file is a PROGRAM file, parameter 1 holds the autostart line number (or a number >=32768 if no LINE parameter was given) and parameter 2 holds the start of the variable area relative to the start of the program. If it's a CODE file, parameter 1 holds the start of the code block when saved, and parameter 2 holds 32768. For data files finally, the byte at position 14 decimal holds the variable name.
-
-
- cassettelabel definition LABEL for STANDARD LOADING SPEED
-  leader   5 seconds
-  sync pulse
- 1 byte   T-byte defines for HEADERblock , its a controle byte/flag, 'hardware' if you like
- int Tbyte ;  '0x00' for Header, '0xFF' for datablock
-
-   label_   a fetch_label routine could be easy
- char zxlabel[17] ;  all 17 standard_header information bytes, the 'label'
- 1 byte       label_type
- char label_type ;
- 10byte       label_name
-char label_name[101] ;  yes 101 instead off 10 since TOKENS are longer like 10x 'RANDOMIZE ' = 100 bytes + 1 leading space is 101 JUST for the label name
- 2 byte       label_length
-int label_data_length ;
- 2 byte       label_type-depending parameters
-int label_data_adres ;
-                 array_type 2 BIT , BIN11xxxxxx bit 6 and 7
-                 array_name 6 BIT , BINxx111111 bit 0 to  5
-char label_array_type ;
-char label_array_chr ;
-
- 2 byte       label_undefined_spare
-int label_spare ;  the length of the variables block after the program block maybe
-
- 1 byte   P-byte  parity-byte , its a controle byte/flag  created by a full XOR of all databytes
-int Pbyte ;
- GAB inbetween blocks
-
- cassettelabel definition DATA
-  leader  2 seconds
-  sync pulse
- 1 byte   T-byte defines for DATAblock
- N byte   DATA or program
- 1 byte   P-byte  parity-byte
-
 */
 
 #include <config.h>
@@ -280,6 +221,42 @@ print_block_name( libspectrum_byte * data )
   fprint_block_name( stdout, data );
 }
 
+/*
+The header block has the following structure:
+  - leader (5 seconds)
+  - sync pulse
+  - flag byte: this is 0x00 for header blocks and 0xff for data blocks
+  - header data
+  - checksum byte, calculated such that XORing all the data bytes together
+    (including the flag byte) produces 0x00
+
+The structure of the 17 byte tape header is:
+
+Byte    Length  Description
+---------------------------
+0       1       Type (0,1,2 or 3)
+1       10      Filename (padded with blanks)
+11      2       Length of data block
+13      2       Parameter 1
+15      2       Parameter 2
+
+The type is 0,1,2 or 3 for a PROGRAM, Number array, Character array or
+CODE file respectively.
+
+The data block has the following structure:
+  - leader (2 seconds)
+  - sync pulse
+  - flag byte: this is 0x00 for header blocks and 0xff for data blocks
+  - data
+  - checksum byte, calculated such that XORing all the data bytes together
+    (including the flag byte) produces 0x00
+
+More info about the standard tape header label:
+  "Zakboekje voor de ZX Spectrum" by Wessel Akkermans, pages 100-102.
+  http://www.worldofspectrum.org/faq/reference/48kreference.htm#TapeDataStructure
+  http://faqwiki.zxnet.co.uk/wiki/Spectrum_tape_interface
+*/
+
 /* decode header and save data */
 static void
 decode_header( libspectrum_tape_block *block )
@@ -334,6 +311,10 @@ decode_header( libspectrum_tape_block *block )
     }
     switch( data[1] ) {
     case 0:
+      /* If the file is a PROGRAM file, parameter 1 holds the autostart line
+         number (or a number >=32768 if no LINE parameter was given) and
+         parameter 2 holds the start of the variable area relative to the start
+         of the program */
       printf( " > Program: \"" );
       print_block_name( data );
       printf( "\"" );
@@ -375,9 +356,13 @@ decode_header( libspectrum_tape_block *block )
       print_block_name( data );
       printf( "\"" );
 
+      /* A SCREEN$ file is regarded as a CODE file with start address 16384 and
+         length 6912 */
       if( parameter1 == 16384 && zxlength == 6912 ) {
         printf( " SCREEN$ " );
       } else {
+        /* If it's a CODE file, parameter 1 holds the start of the code block
+           when saved, and parameter 2 holds 32768 */
         printf( " CODE " );
       }
       printf( " %d, %d", parameter1, zxlength );
