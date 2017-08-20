@@ -430,8 +430,8 @@ decode_header( libspectrum_tape_block *block )
 static int
 process_tape( char *filename )
 {
-  int error;
-
+  int error, min;
+  float sec;
   unsigned char *buffer; size_t length;
   libspectrum_tape *tape;
   libspectrum_tape_iterator iterator;
@@ -717,7 +717,9 @@ process_tape( char *filename )
 
   }
 
-  printf( "Total tape duration: %.2f sec\n", total_length/3500000.0 );
+  min = ( total_length / 3500000.0 ) / 60;
+  sec = ( total_length / 3500000.0 ) - min * 60;
+  printf( "Total tape duration: %d min, %.2f sec\n", min, sec );
 
   error = libspectrum_tape_free( tape );
   if( error != LIBSPECTRUM_ERROR_NONE ) return error;
