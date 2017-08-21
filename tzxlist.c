@@ -196,8 +196,7 @@ check_checksum(unsigned long length, libspectrum_byte * data)
     retval = checksum == data[length-1];
   }
 
-  printf( "  Checksum by XOR Paritybyte: %s, result %d\n",
-          (retval ? "pass" : "fail"), checksum );
+  printf( "  Checksum: 0x%02x (%s)\n", checksum, retval ? "PASS" : "FAIL" );
 }
 
 static void
@@ -271,9 +270,9 @@ decode_header( libspectrum_tape_block *block )
   int error;
 
   if( !is_header ) {
-    printf( " >>  Datablock length: %ld\n", length - 2 );
+    printf( "  Datablock length: %ld\n", length - 2 );
     if( f ) {
-      fprintf( f, " >>  Datablock length: %ld\n", length - 2 );
+      fprintf( f, "  Datablock length: %ld\n", length - 2 );
     }
   }
 
@@ -319,44 +318,44 @@ decode_header( libspectrum_tape_block *block )
          number (or a number >=32768 if no LINE parameter was given) and
          parameter 2 holds the start of the variable area relative to the start
          of the program */
-      printf( " > Program: \"" );
+      printf( "  Program: \"" );
       print_block_name( data );
       printf( "\"" );
       if( parameter1 < 0x2710 ) printf( " LINE %d", parameter1 );
-      printf( "\n > Length: %d including variablelength %d", zxlength,
+      printf( "\n  Length: %d, includes variable length: %d", zxlength,
               zxlength - parameter2 );
       if( f ) {
-        fprintf( f, " > Program: \"" );
+        fprintf( f, "  Program: \"" );
         fprint_block_name( f, data );
         fprintf( f, "\"" );
         if( parameter1 < 0x2710 ) fprintf( f, " LINE %d", parameter1 );
-        fprintf( f, "\n > Length: %d including variablelength %d", zxlength,
+        fprintf( f, "\n  Length: %d, includes variable length: %d", zxlength,
                  zxlength - parameter2 );
       }
       break;
     case 1:
-      printf( " > Number Array: \"" );
+      printf( "  Number Array: \"" );
       print_block_name( data );
       /* fetch BITS 0-6 only by bitwise AND operation */
       printf( "\" DATA %c() ", (char)( data[15] & 63 ) + 64 );
       if( f ) {
-        fprintf( f, " > Number Array: \"" );
+        fprintf( f, "  Number Array: \"" );
         fprint_block_name( f, data );
         fprintf( f, "\" DATA %c() ", (char)( data[15] & 63 ) + 64 );
       }
       break;
     case 2:
-      printf( " > Character Array: \"" );
+      printf( "  Character Array: \"" );
       print_block_name( data );
       printf( "\" DATA %c$() ", (char)( data[15] & 63 ) + 64 );
       if( f ) {
-        fprintf( f, " > Character Array: \"" );
+        fprintf( f, "  Character Array: \"" );
         fprint_block_name( f, data );
         fprintf( f, "\" DATA %c$()", (char)( data[15] & 63 ) + 64 );
       }
       break;
     case 3:
-      printf( " > Bytes: \"" );
+      printf( "  Bytes: \"" );
       print_block_name( data );
       printf( "\"" );
 
