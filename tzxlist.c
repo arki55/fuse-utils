@@ -282,22 +282,26 @@ decode_header( libspectrum_tape_block *block )
     parameter1 = data[14] + data[15] * 0x100;
     parameter2 = data[16] + data[17] * 0x100;
 
-    printf( " >>  Headerblock, labelinfo >\n > " );
-    for( i = 1; i <= 17; i++ ) {
-      printf( "%d ", data[i] );
-      if( i == 1 || i == 11 || i == 13 || i == 15 ) printf( " | " );
-    }
-    printf( "\n >      zxlength %d  | parameter1: %d | parameter2: %d\n",
+    printf( "  Block header, zxlength: %d, parameter1: %d, parameter2: %d\n",
             zxlength, parameter1, parameter2 );
 
+    printf( "  Raw header:" );
+    for( i = 1; i <= 17; i++ ) {
+      printf( " %02x", data[i] );
+      if( i == 1 || i == 11 || i == 13 || i == 15 ) printf( " |" );
+    }
+    printf( "\n" );
+
     if( f ) {
-      fprintf( f, " >>  Headerblock, labelinfo:\n > " );
-      for( i = 1; i <= 17; i++ ) {
-        fprintf( f, "%d ", data[i] );
-        if( i == 1 || i == 11 || i == 13 || i == 15 ) fprintf( f, " | " );
-      }
-      fprintf( f, "\n >      zxlength %d  | parameter1: %d | parameter2: %d\n",
+      fprintf( f,
+               "  Block header, zxlength: %d, parameter1: %d, parameter2: %d\n",
                zxlength, parameter1, parameter2 );
+      fprintf( f, "  Raw header:" );
+      for( i = 1; i <= 17; i++ ) {
+        fprintf( f, " %02x", data[i] );
+        if( i == 1 || i == 11 || i == 13 || i == 15 ) fprintf( f, " |" );
+      }
+      fprintf( f, "\n" );
     }
 
     save = ( dump_block == -1 || dump_block == block_num ) ? 1 : 0;
