@@ -1,3 +1,11 @@
+2017-09-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+
+        * Version 1.3.4 released
+
+        * fmfconv
+          * Fix handling of Timex hires frames (Fredrick Meunier).
+          * Extract FMF type handling (Fredrick Meunier).
+
 2017-07-31  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
         * Version 1.3.3 released
