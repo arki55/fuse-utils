@@ -2,6 +2,7 @@
    Copyright (c) 2001-2016 Philip Kendall, Darren Salt, Fredrick Meunier
    Copyright (c) 2015 Sergio Baldovi
    Copyright (c) 2016 Gergely Szasz
+   Copyright (c) 2017 Chris Born
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -195,7 +196,7 @@ check_checksum(unsigned long length, libspectrum_byte * data)
     retval = checksum == data[length-1];
   }
 
-  printf("  Checksum: %s\n", (retval ? "pass" : "fail"));
+  printf( "  Checksum: 0x%02x (%s)\n", checksum, retval ? "PASS" : "FAIL" );
 }
 
 static void
@@ -219,6 +220,42 @@ print_block_name( libspectrum_byte * data )
   fprint_block_name( stdout, data );
 }
 
+/*
+The header block has the following structure:
+  - leader (5 seconds)
+  - sync pulse
+  - flag byte: this is 0x00 for header blocks and 0xff for data blocks
+  - header data
+  - checksum byte, calculated such that XORing all the data bytes together
+    (including the flag byte) produces 0x00
+
+The structure of the 17 byte tape header is:
+
+Byte    Length  Description
+---------------------------
+0       1       Type (0,1,2 or 3)
+1       10      Filename (padded with blanks)
+11      2       Length of data block
+13      2       Parameter 1
+15      2       Parameter 2
+
+The type is 0,1,2 or 3 for a PROGRAM, Number array, Character array or
+CODE file respectively.
+
+The data block has the following structure:
+  - leader (2 seconds)
+  - sync pulse
+  - flag byte: this is 0x00 for header blocks and 0xff for data blocks
+  - data
+  - checksum byte, calculated such that XORing all the data bytes together
+    (including the flag byte) produces 0x00
+
+More info about the standard tape header label:
+  "Zakboekje voor de ZX Spectrum" by Wessel Akkermans, pages 100-102.
+  http://www.worldofspectrum.org/faq/reference/48kreference.htm#TapeDataStructure
+  http://faqwiki.zxnet.co.uk/wiki/Spectrum_tape_interface
+*/
+
 /* decode header and save data */
 static void
 decode_header( libspectrum_tape_block *block )
@@ -227,12 +264,45 @@ decode_header( libspectrum_tape_block *block )
   libspectrum_byte * data = libspectrum_tape_block_data( block );
   int is_header = length == 19 && data[0] == 0x00;
   char filename[17]; /* %8d.dsc; %8d.hdr %8d.dat */
-  int save = 0;
+  int save = 0, i, zxlength, parameter1, parameter2;
   static int save_data = -9999;
   FILE *f = NULL;
   int error;
 
-  if(is_header) {
+  if( !is_header ) {
+    printf( "  Datablock length: %ld\n", length - 2 );
+    if( f ) {
+      fprintf( f, "  Datablock length: %ld\n", length - 2 );
+    }
+  }
+
+  if( is_header ) {
+    zxlength = data[12] + data[13] * 0x100;
+    parameter1 = data[14] + data[15] * 0x100;
+    parameter2 = data[16] + data[17] * 0x100;
+
+    printf( "  Block header, zxlength: %d, parameter1: %d, parameter2: %d\n",
+            zxlength, parameter1, parameter2 );
+
+    printf( "  Raw header:" );
+    for( i = 1; i <= 17; i++ ) {
+      printf( " %02x", data[i] );
+      if( i == 1 || i == 11 || i == 13 || i == 15 ) printf( " |" );
+    }
+    printf( "\n" );
+
+    if( f ) {
+      fprintf( f,
+               "  Block header, zxlength: %d, parameter1: %d, parameter2: %d\n",
+               zxlength, parameter1, parameter2 );
+      fprintf( f, "  Raw header:" );
+      for( i = 1; i <= 17; i++ ) {
+        fprintf( f, " %02x", data[i] );
+        if( i == 1 || i == 11 || i == 13 || i == 15 ) fprintf( f, " |" );
+      }
+      fprintf( f, "\n" );
+    }
+
     save = ( dump_block == -1 || dump_block == block_num ) ? 1 : 0;
     if( save ) {
       snprintf( filename, 16, "%08d.dsc", block_num );
@@ -244,39 +314,72 @@ decode_header( libspectrum_tape_block *block )
     }
     switch( data[1] ) {
     case 0:
-      printf("  Program: ");
+      /* If the file is a PROGRAM file, parameter 1 holds the autostart line
+         number (or a number >=32768 if no LINE parameter was given) and
+         parameter 2 holds the start of the variable area relative to the start
+         of the program */
+      printf( "  Program: \"" );
       print_block_name( data );
+      printf( "\"" );
+      if( parameter1 < 0x2710 ) printf( " LINE %d", parameter1 );
+      printf( "\n  Length: %d, includes variable length: %d", zxlength,
+              zxlength - parameter2 );
       if( f ) {
-        fprintf( f, "Program: " );
+        fprintf( f, "  Program: \"" );
         fprint_block_name( f, data );
+        fprintf( f, "\"" );
+        if( parameter1 < 0x2710 ) fprintf( f, " LINE %d", parameter1 );
+        fprintf( f, "\n  Length: %d, includes variable length: %d", zxlength,
+                 zxlength - parameter2 );
       }
       break;
     case 1:
-      printf("  Number Array: ");
+      printf( "  Number Array: \"" );
       print_block_name( data );
+      /* fetch BITS 0-6 only by bitwise AND operation */
+      printf( "\" DATA %c() ", (char)( data[15] & 63 ) + 64 );
       if( f ) {
-        fprintf( f, "Number Array: " );
+        fprintf( f, "  Number Array: \"" );
         fprint_block_name( f, data );
+        fprintf( f, "\" DATA %c() ", (char)( data[15] & 63 ) + 64 );
       }
       break;
     case 2:
-      printf("  Character Array: ");
+      printf( "  Character Array: \"" );
       print_block_name( data );
+      printf( "\" DATA %c$() ", (char)( data[15] & 63 ) + 64 );
       if( f ) {
-        fprintf( f, "Character Array: " );
+        fprintf( f, "  Character Array: \"" );
         fprint_block_name( f, data );
+        fprintf( f, "\" DATA %c$()", (char)( data[15] & 63 ) + 64 );
       }
       break;
     case 3:
-      printf("  CODE: ");
+      printf( "  Bytes: \"" );
       print_block_name( data );
-      printf("\n  Start: %d\n", data[14] + data[15] * 0x100 );
-      printf("  Length: %d", data[12] + data[13] * 0x100 );
+      printf( "\"" );
+
+      /* A SCREEN$ file is regarded as a CODE file with start address 16384 and
+         length 6912 */
+      if( parameter1 == 16384 && zxlength == 6912 ) {
+        printf( " SCREEN$ " );
+      } else {
+        /* If it's a CODE file, parameter 1 holds the start of the code block
+           when saved, and parameter 2 holds 32768 */
+        printf( " CODE " );
+      }
+      printf( " %d, %d", parameter1, zxlength );
+
       if( f ) {
-        fprintf( f, "CODE: " );
+        fprintf( f, " Bytes: \"" );
         fprint_block_name( f, data );
-        fprintf( f, "\nStart: %d\n", data[14] + data[15] * 0x100 );
-        fprintf( f, "Length: %d", data[12] + data[13] * 0x100 );
+        fprintf( f, "\"" );
+        if( parameter1 == 16384 && zxlength == 6912 ) {
+          fprintf( f, " SCREEN$ " );
+        } else {
+          fprintf( f, " CODE " );
+        }
+        fprintf( f, " %d, %d", parameter1, zxlength );
       }
       break;
     default:
@@ -315,8 +418,8 @@ decode_header( libspectrum_tape_block *block )
 static int
 process_tape( char *filename )
 {
-  int error;
-
+  int error, min;
+  float sec;
   unsigned char *buffer; size_t length;
   libspectrum_tape *tape;
   libspectrum_tape_iterator iterator;
@@ -368,7 +471,7 @@ process_tape( char *filename )
 
   free( buffer );
 
-  printf("Listing of `%s':\n\n", filename );
+  printf( "\n\nListing of `%s':\n\n", filename );
 
   block = libspectrum_tape_iterator_init( &iterator, tape );
 
@@ -380,7 +483,7 @@ process_tape( char *filename )
 					  block );
     if( error ) return 1;
     printf( "--= Block #%d =--\n", block_num );
-    printf( "Block type 0x%02x (%s)\n", libspectrum_tape_block_type( block ),
+    printf( "  Block type 0x%02x (%s)\n", libspectrum_tape_block_type( block ),
 	    description );
     printf("  Block duration: %.2f sec\n",
            libspectrum_tape_block_length( block )/3500000.0 );
@@ -390,7 +493,7 @@ process_tape( char *filename )
 
     case LIBSPECTRUM_TAPE_BLOCK_ROM:
       {
-        printf("  Data length: %ld bytes\n",
+        printf("  Block length: %ld bytes\n",
                (unsigned long)libspectrum_tape_block_data_length( block ) );
         decode_header( block );
         printf("  Pause length: %d ms\n",
@@ -602,7 +705,9 @@ process_tape( char *filename )
 
   }
 
-  printf( "Total tape duration: %.2f sec\n", total_length/3500000.0 );
+  min = ( total_length / 3500000.0 ) / 60;
+  sec = ( total_length / 3500000.0 ) - min * 60;
+  printf( "Total tape duration: %d min, %.2f sec\n", min, sec );
 
   error = libspectrum_tape_free( tape );
   if( error != LIBSPECTRUM_ERROR_NONE ) return error;
