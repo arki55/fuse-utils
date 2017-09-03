@@ -19,12 +19,12 @@ dnl
 dnl E-mail: philip-fuse@shadowmagic.org.uk
 
 dnl Package version
-m4_define([fuse_utils_version], [1.3.3])
+m4_define([fuse_utils_version], [1.3.4])
 
 dnl Product full version
 m4_define([fuse_utils_major_version], [1])
 m4_define([fuse_utils_minor_version], [3])
-m4_define([fuse_utils_micro_version], [3])
+m4_define([fuse_utils_micro_version], [4])
 m4_define([fuse_utils_nano_version],  [0])
 m4_define([fuse_utils_full_version],
           [fuse_utils_major_version.fuse_utils_minor_version.fuse_utils_micro_version.fuse_utils_nano_version])
