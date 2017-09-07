@@ -42,7 +42,7 @@ snd_write_auheader( void )
   buff[0] = 0x2e736e64UL;		/* magic id */
   buff[1] = 24 + 64;
   buff[2] = ~0U;
-  buff[3] = snd_enc == TYPE_PCM ? 3 : ( snd_enc == TYPE_ULW ? 1 : 27 );
+  buff[3] = snd_enc == PCM ? 3 : ( snd_enc == ULW ? 1 : 27 );
   buff[4] = out_rte;
   buff[5] = snd_chn;
 #else
