@@ -161,5 +161,5 @@ tapeconv_SOURCES += tapeconv_res.rc
 tzxlist_SOURCES += tzxlist_res.rc
 
 .rc.o:
-	$(AM_V_GEN)$(WINDRES) -I$(srcdir) -I$(top_builddir) $(CPPFLAGS) -o $@ $<
+	$(AM_V_GEN)$(WINDRES) -I$(srcdir) -I$(top_builddir) $(LIBSPECTRUM_CFLAGS) $(CPPFLAGS) -o $@ $<
 endif
