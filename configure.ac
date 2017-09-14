@@ -195,7 +195,7 @@ PKG_CHECK_MODULES([LIBSPECTRUM], [libspectrum >= 1.3.6])
 dnl Check if supplied libspectrum has its own internal GLib replacement
 AC_MSG_CHECKING(whether libspectrum has its own internal GLib replacement)
 ac_save_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $LIBSPEC_CFLAGS"
+CPPFLAGS="$CPPFLAGS $LIBSPECTRUM_CFLAGS"
 AC_PREPROC_IFELSE(
   [AC_LANG_SOURCE([
 #include <libspectrum.h>
