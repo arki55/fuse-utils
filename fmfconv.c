@@ -963,14 +963,14 @@ open_inp( void )
 
   if( inp_t == TYPE_UNSET ) {	/* try to identify the file type */
     fread_buff( fhead, 4, INTO_BUFF );		/* check file type */
-    if( memcmp( fhead, "FMF_", 4 ) == 0 )
-      inp_t = TYPE_FMF;
-    else
-      inp_t = TYPE_SCR;
+    if( memcmp( fhead, "FMF_", 4 ) != 0 ) {
+      printe( "Cannot identify input file '%s'...\n", inp_name );
+      return ERR_OPEN_INP;
+    }
+    inp_t = TYPE_FMF;
   }
-  do_now = inp_t == TYPE_FMF ? DO_HEAD : DO_SLICE;
-  printi( 0, "open_inp(): Input file (%s) opened as %s file.\n", inp_name,
-          inp_t == TYPE_FMF ? "FMF" : "SCR" );
+  do_now = DO_HEAD;
+  printi( 0, "open_inp(): Input file (FMF) opened as %s file.\n", inp_name );
   return 0;
 }
 
@@ -1374,14 +1374,6 @@ we have to handle cut here
     return fmf_read_screen();
   }
   return err;
-}
-
-static int
-scr_read_scr( void )
-{
-  /* FIXME: implement SCR support or remove this. Unknown file format is
-     interpreted as SCR file */
-  return 1;
 }
 
 /* store RGB/YUV/Paletted color/grayscale pixel*/
@@ -2108,11 +2100,7 @@ main( int argc, char *argv[] )
       if( ( err = fmf_read_frame_head() ) ) eop = 1;
       break;
     case DO_SLICE:					/* read next fmf slice or 'N' or 'S' or 'X' */
-      if( inp_t == TYPE_FMF ) {
-        if( ( err = fmf_read_slice() ) ) eop = 1;
-      } else {						/* read SCR file */
-        if( ( err = scr_read_scr() ) ) eop = 1;
-      }
+      if( ( err = fmf_read_slice() ) ) eop = 1;
       if( out_t != TYPE_NONE ) {		/* convert slice to RGB or YUV if needed */
         if( out_t >= TYPE_PPM ) out_2_pix();
       }
