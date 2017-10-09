@@ -1,3 +1,15 @@
+2017-10-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+
+        * Version 1.3.5 released
+
+        * fmfconv
+          * Fix build in big-endian platforms (Alberto Garcia).
+          * Remove unimplemented SCR reading (Fredrick Meunier).
+
+        * Various minor bug fixes/improvements:
+          * Fix GLib replacement detection (Sergio Baldoví).
+          * Fix libspectrum.h preprocessing in windres resources (Guesser).
+
 2017-09-03  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
         * Version 1.3.4 released
