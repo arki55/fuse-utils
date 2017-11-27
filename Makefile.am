@@ -34,6 +34,7 @@ bin_PROGRAMS = createhdf \
 	       scl2trd \
 	       snap2tzx \
 	       snapconv \
+	       snapdump \
 	       tapeconv \
 	       tape2pulses \
 	       tzxlist
@@ -102,6 +103,9 @@ snap2tzx_LDADD = $(LIBSPECTRUM_LIBS) compat/libcompatos.a
 snapconv_SOURCES = snapconv.c utils.c
 snapconv_LDADD = $(LIBSPECTRUM_LIBS) compat/libcompatos.a
 
+snapdump_SOURCES = snapdump.c utils.c
+snapdump_LDADD = $(LIBSPECTRUM_LIBS) compat/libcompatos.a
+
 tapeconv_SOURCES = tapeconv.c utils.c
 tapeconv_LDADD = $(LIBSPECTRUM_LIBS) compat/libcompatos.a
 
@@ -155,6 +159,7 @@ rzxtool_SOURCES += rzxtool_res.rc
 scl2trd_SOURCES += scl2trd_res.rc
 snap2tzx_SOURCES += snap2tzx_res.rc
 snapconv_SOURCES += snapconv_res.rc
+snapdump_SOURCES += snapdump_res.rc
 tape2pulses_SOURCES += tape2pulses_res.rc
 tape2wav_SOURCES += tape2wav_res.rc
 tapeconv_SOURCES += tapeconv_res.rc

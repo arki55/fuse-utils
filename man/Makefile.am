@@ -34,6 +34,7 @@ man_MANS = \
            man/scl2trd.1 \
            man/snap2tzx.1 \
            man/snapconv.1 \
+           man/snapdump.1 \
            man/tape2pulses.1 \
            man/tape2wav.1 \
            man/tapeconv.1 \
