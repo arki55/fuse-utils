@@ -786,7 +786,7 @@ show_help( void )
 {
   printf(
     "Usage: %s [OPTION] <infile>\n"
-    "List contents of Sinclair ZX Spectrum input snapshot files.\n"
+    "List contents of Sinclair ZX Spectrum snapshot files.\n"
     "\n"
     "Options:\n"
     "  -m             Dump ROM/RAM memory pages to files.\n"
