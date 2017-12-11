@@ -45,7 +45,7 @@ BEGIN
       VALUE "FileDescription",  "List contents of ZX Spectrum snapshot files\0"
       VALUE "FileVersion",      VERSION##"\0"
       VALUE "InternalName",     "snapdump\0"
-      VALUE "LegalCopyright",   "Copyright (c) 2017 Sergio Baldoví\0"
+      VALUE "LegalCopyright",   "Copyright (c) 2017 Sergio Baldovi\0"
       VALUE "License",          "snapdump is licensed under the GNU General Public License, version 2 or later\0"
       VALUE "OriginalFilename", "snapdump.exe\0"
       VALUE "ProductName",      PACKAGE##"\0"
