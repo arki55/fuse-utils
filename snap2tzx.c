@@ -2,8 +2,9 @@
    Copyright (c) 1997-2001 ThunderWare Research Center, written by
                            Martijn van der Heide,
 		 2003 Tomaz Kac,
-		 2003 Philip Kendall
-   Copyright (c) 2014-2015 Sergio Baldovi
+		 2003 Philip Kendall,
+                 2014-2015 Sergio Baldovi,
+                 2018 Duncan Edwards
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -270,7 +271,7 @@ initialise_settings( settings_t *settings )
   strncpy( settings->info1, "                                ", 33 );
   strncpy( settings->info2, "                                ", 33 );
 
-  settings->speed = 3;
+  settings->speed = 5;
   settings->load_colour = -1;
   settings->bright = 0x00;
 
@@ -325,7 +326,7 @@ print_help( void )
 	  "  -l s  Use 's' as the BASIC filename (max 8 characters)\n"
 	  "  -o f  Output to file 'f'\n"
 	  "  -r    Make final attribute line BRIGHT\n"
-	  "  -s n  Set loading speed: 0: 1500 1: 2250 2:3000 3: 6000 bps\n"
+	  "  -s n  Set loading speed: 0: 1500 1: 2250 2: 3000 3: 4500 4: 5000 5: 6000 bps\n"
 	  "  -v    Verbose output\n"
 	  "  -$ f  Use .scr file 'f' as the loading screen\n"
 	  "  -h    Display this help and exit\n"
@@ -420,7 +421,7 @@ parse_args( settings_t *settings, int argc, char **argv )
       /* Speed value  */
     case 's':
       settings->speed = atoi( optarg );
-      if( settings->speed < 0 || settings->speed > 3 ) {
+      if( settings->speed < 0 || settings->speed > 5 ) {
 	print_error( "invalid speed (%d)", settings->speed );
 	return 1;
       }
@@ -574,6 +575,18 @@ static const size_t basic_info2_offset = 144;
 /*              PilotMin = 1453 + 16a = 1453 + 16*7 = 1565 T                                                                      */
 /*              PilotMax = 3130 + 16a = 3130 + 16*7 = 3242 T => 1900 T                                                            */
 /*              Sync0 = 840 + 16a = 840 + 16*7 = 952 T => 550 T                                                                   */
+/*  4500 bps => 778 T => hb0 = 259 T, hb1 = 519 T, avg = 389 (778) T                                                              */
+/*              279 + 32a + 43b = 778 => 32x + 86x = 449 => 118x = 499 => x = 4.2                                                 */
+/*              279 + 32*5 + 43*8 = 783 (778 needed), so a = 5, b = 8, bd = 10                                                    */
+/*              PilotMin = 1453 + 16a = 1453 + 16*5 = 1533 T                                                                      */
+/*              PilotMax = 3130 + 16a = 3130 + 16*5 = 3210 T => 1900 T                                                            */
+/*              Sync0 = 840 + 16a = 840 + 16*5 = 920 T => 550 T                                                                   */
+/*  5000 bps => 700 T => hb0 = 234 T, hb1 = 468 T, avg = 351 (702) T                                                              */
+/*              279 + 32a + 43b = 702 => 32x + 86x = 423 => 118x = 423 => x = 3.5                                                 */
+/*              279 + 32*4 + 43*7 = 708 (702 needed), so a = 4, b = 7, bd = 9                                                     */
+/*              PilotMin = 1453 + 16a = 1453 + 16*4 = 1517 T                                                                      */
+/*              PilotMax = 3130 + 16a = 3130 + 16*4 = 3194 T => 1800 T                                                            */
+/*              Sync0 = 840 + 16a = 840 + 16*4 = 904 T => 500 T                                                                   */
 /*  6000 bps => 584 T => hb0 = 195 T, hb1 = 390 T, avg = 293 (585) T                                                              */
 /*              279 + 32a + 43b = 585 => 32x + 86x = 306 => 118x = 306 => x = 2.6                                                 */
 /*              279 + 32*3 + 43*5 = 590 (585 needed), so a = 3, b = 5, bd = 7                                                     */
@@ -604,6 +617,8 @@ static const turbo_variables_t turbo_variables[] = {
   { 0x80 + 41, 20, 2168, 667, 855 },	/* ROM values => 1364 bps */
   { 0x80 + 24, 11, 2000, 600, 518 },	/* 2250 bps */
   { 0x80 + 18,  7, 1900, 550, 389 },	/* 3000 bps */
+  { 0x80 + 10,  5, 1900, 550, 259 },	/* 4500 bps */
+  { 0x80 +  9,  4, 1850, 525, 234 },	/* 5000 bps */
   { 0x80 +  7,  3, 1700, 450, 200 },	/* 6000 bps */
 
 };

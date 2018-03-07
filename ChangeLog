@@ -1,3 +1,11 @@
+2017-03-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+
+        * Version 1.5.2 released
+
+        * snap2tzx
+          * Add 4500 and 5000 bps rates for use with TZXduino (Duncan
+            Edwards).
+
 2017-12-10  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
         * Version 1.4.0 released
