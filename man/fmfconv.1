@@ -349,8 +349,31 @@ Convert FMF to a mpeg video with quality equivalent to YouTube:
 .RS
 .EX
 fmfconv input.fmf | ffmpeg \-i \- \-vf scale=480:360 \-r 25
-        \-codec:v h264 \-codec:a aac \-f mov \-b:a 128000
-        \-b:v 600000 \-pix_fmt yuv420p \-strict \-2 output.mov
+        \-codec:v h264 \-codec:a aac \-f mp4 \-b:a 128k
+        \-b:v 600k \-pix_fmt yuv420p \-strict \-2 output.mp4
+.EE
+.RE
+.PP
+Convert FMF to compact lossless 720p:
+.PP
+.RS
+.EX
+fmfconv input.fmf | ffmpeg \-i \- \-vf palettegen palette.png
+fmfconv input.fmf | ffmpeg \-i \- \-i palette.png \-filter_complex
+        "scale=960:720:flags=neighbor [x]; [x][1:v] paletteuse"
+        \-c:a flac \-c:v zmbv \-compression_level:a 12 output.mkv
+.EE
+.RE
+.PP
+Convert FMF to compact lossless 1080p:
+.PP
+.RS
+.EX
+fmfconv input.fmf | ffmpeg \-i \- \-vf palettegen palette.png
+fmfconv input.fmf | ffmpeg -i - -i palette.png -filter_complex
+        "crop=288:216,scale=1440:1080:flags=neighbor
+              [x]; [x][1:v] paletteuse"
+        \-c:a flac \-c:v zmbv \-compression_level:a 12 output.mkv
 .EE
 .RE
 .PP
@@ -377,8 +400,8 @@ Convert FMF to iPod video format:
 .RS
 .EX
 fmfconv input.fmf | ffmpeg \-i \- \-vf scale=320:240 \-r 30
-        \-codec:v h264 \-codec:a aac \-f ipod \-ar 44100 \-b:a 128000
-        \-b:v 256000 \-pix_fmt yuv420p \-strict \-2 output.m4v
+        \-codec:v h264 \-codec:a aac \-f ipod \-ar 44100 \-b:a 128k
+        \-b:v 256k \-pix_fmt yuv420p \-strict \-2 output.m4v
 .EE
 .RE
 .PP
