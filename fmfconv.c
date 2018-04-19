@@ -1351,20 +1351,20 @@ fmf_read_slice( void )
 /*
 we have to handle cut here
 */
-  if( cut_cmd != TYPE_NONE ) {
-    if( cut_cmd == TYPE_CUT && ( cut_t_t == TYPE_FRAME ? frame_no > cut__to : time_sec > cut__to ) )
-      inp_get_next_cut();
-    if( ( cut_f_t == TYPE_FRAME ? frame_no >= cut_frm : time_sec >= cut_frm ) &&
-	( cut_cmd == TYPE_CUTFROM || ( cut_t_t == TYPE_FRAME ? frame_no <= cut__to : time_sec <= cut__to ) ) ) {
+    if( cut_cmd != TYPE_NONE ) {
+      if( cut_cmd == TYPE_CUT && ( cut_t_t == TYPE_FRAME ? frame_no > cut__to : time_sec > cut__to ) )
+        inp_get_next_cut();
+      if( ( cut_f_t == TYPE_FRAME ? frame_no >= cut_frm : time_sec >= cut_frm ) &&
+          ( cut_cmd == TYPE_CUTFROM || ( cut_t_t == TYPE_FRAME ? frame_no <= cut__to : time_sec <= cut__to ) ) ) {
 
-      if( cut_cmd == TYPE_CUTFROM ) fmfconv_stop = 1;
-      drop_no++;
-      cut_cut = 1;
+        if( cut_cmd == TYPE_CUTFROM ) fmfconv_stop = 1;
+        drop_no++;
+        cut_cut = 1;
+      }
     }
-  }
 
-  if( sound_exists == 0 && !cut_cut ) err = fmf_gen_sound();	/* generate silence */
-    sound_exists = 0;
+    if( sound_exists == 0 && !cut_cut ) err = fmf_gen_sound();	/* generate silence */
+      sound_exists = 0;
   } else if( fhead[0] == 'X' ) {
     do_now = DO_LAST_FRAME;
   } else if( fhead[0] == 'S' ) {
