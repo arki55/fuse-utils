@@ -144,14 +144,6 @@ int machine_ftime[] = {
   19968, 19992, 16635, 20000, 16764
 };
 
-const char *machine_name[] = {
- "ZX Spectrum 16K/48K, Timex TC2048/2068, Scorpion, Spectrum SE",	/* A */
- "ZX Spectrum 128K/+2/+2A/+3/+3E/128Ke",				/* B */
- "Timex TS2068", 							/* C */
- "Pentagon 128K/256K/512K"						/* D */
- "ZX Spectrum 48K (NTSC)"						/* E */
-};
-
 #define SCR_PITCH 40
 libspectrum_byte zxscr[9600 * 2];	/* 2x 40x240 bitmap1 bitmap2 */
 libspectrum_byte attrs[9600];		/* 40x240 attrib */
@@ -1048,7 +1040,7 @@ check_fmf_head( void )
   printi( 1, "check_fmf_head(): file:  FMF V1 %s endian %scompressed.\n",
           fmf_little_endian ? "little" : "big", fmf_compr ? "" : "un" );
   printi( 1, "check_fmf_head(): video: frame rate = 1:%d frame time: %dus %s machine timing.\n", frm_rte, machine_ftime[frm_mch],
-          machine_name[frm_mch] );
+          get_machine_type_string(frm_mch) );
   printi( 1, "check_fmf_head(): audio: sampling rate %dHz %s encoded %s sound.\n",
           snd_rte, get_sound_type_string( snd_enc ), snd_chn == 2 ? "stereo" : "mono" );
   return 0;
@@ -1095,7 +1087,8 @@ fmf_read_frame_head( void )
     time_sec++;
   }
   printi( 2, "fmf_read_frame_head(): rate = 1:%d frame time: %dus %s machine.\n",
-          frm_rte, machine_ftime[frm_mch], machine_name[frm_mch] );
+          frm_rte, machine_ftime[frm_mch],
+          get_machine_type_string(frm_mch) );
   return 0;
 }
 

@@ -61,6 +61,8 @@ typedef enum {
   SPECTRUM_NTSC_LIKE
 } fmf_machine_type;
 
-fmf_machine_type get_machine_type( int machine_type );
+fmf_machine_type get_machine_type( char machine_type );
+
+const char* get_machine_type_string(fmf_machine_type type);
 
 #endif	/* FMFCONV_TYPES_H */

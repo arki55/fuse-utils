@@ -126,7 +126,7 @@ get_sound_channels_count( int sound_channels_type )
 }
 
 fmf_machine_type
-get_machine_type( int machine_type )
+get_machine_type( char machine_type )
 {
   fmf_machine_type retval;
 
@@ -153,4 +153,17 @@ get_machine_type( int machine_type )
   }
 
   return retval;
+}
+
+const char *machine_name[] = {
+ "ZX Spectrum 16K/48K, Timex TC2048/2068, Scorpion, Spectrum SE",	/* A */
+ "ZX Spectrum 128K/+2/+2A/+3/+3E/128Ke",				/* B */
+ "Timex TS2068", 							/* C */
+ "Pentagon 128K/256K/512K"						/* D */
+ "ZX Spectrum 48K (NTSC)"						/* E */
+};
+
+const char*
+get_machine_type_string(fmf_machine_type type) {
+  return machine_name[type];
 }
