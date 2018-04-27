@@ -370,7 +370,7 @@ Convert FMF to compact lossless 1080p:
 .RS
 .EX
 fmfconv input.fmf | ffmpeg \-i \- \-vf palettegen palette.png
-fmfconv input.fmf | ffmpeg -i - -i palette.png -filter_complex
+fmfconv input.fmf | ffmpeg \-i \- \-i palette.png \-filter_complex
         "crop=288:216,scale=1440:1080:flags=neighbor
               [x]; [x][1:v] paletteuse"
         \-c:a flac \-c:v zmbv \-compression_level:a 12 output.mkv
