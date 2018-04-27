@@ -2,9 +2,16 @@
 
         * Version 1.5.2 released
 
+        * snapdump
+          * Don't print UTF-8 characters to the terminal (Sergio Baldoví).
+
         * snap2tzx
           * Add 4500 and 5000 bps rates for use with TZXduino (Duncan
             Edwards).
+
+        * Various minor bug fixes/improvements:
+          * Add more examples of fmfconv movie conversion (Sergio Baldoví).
+          * Minor code changes in fmfconv (Fredrick Meunier).
 
 2017-12-10  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
