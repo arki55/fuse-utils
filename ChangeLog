@@ -10,7 +10,8 @@
             Edwards).
 
         * Various minor bug fixes/improvements:
-          * Add more examples of fmfconv movie conversion (Sergio Baldoví).
+          * Add more examples of fmfconv movie conversion (thanks,
+            lister_of_smeg) (Sergio Baldoví).
           * Minor code changes in fmfconv (Fredrick Meunier).
 
 2017-12-10  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
