@@ -1,6 +1,6 @@
 2017-03-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
-        * Version 1.5.2 released
+        * Version 1.4.1 released
 
         * snapdump
           * Don't print UTF-8 characters to the terminal (Sergio Baldoví).
