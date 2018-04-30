@@ -157,9 +157,9 @@ get_machine_type( char machine_type )
 
 const char *machine_name[] = {
  "ZX Spectrum 16K/48K, Timex TC2048/2068, Scorpion, Spectrum SE",	/* A */
- "ZX Spectrum 128K/+2/+2A/+3/+3E/128Ke",				/* B */
+ "ZX Spectrum 128K/+2/+2A/+3/+3e/128Ke",				/* B */
  "Timex TS2068", 							/* C */
- "Pentagon 128K/256K/512K"						/* D */
+ "Pentagon 128K/512K/1024K"						/* D */
  "ZX Spectrum 48K (NTSC)"						/* E */
 };
 

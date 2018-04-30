@@ -2159,11 +2159,11 @@ main( int argc, char *argv[] )
   if( err ) return err;
 
   /* print global stats */
-  printi( 0, "main(): read %"PRIu64" frame (%"PRIu64" sec) and %"PRIu64" fmf slice and %"PRIu64" fmf sound chunk\n",
-		frame_no, time_sec, fmf_slice_no, fmf_sound_no );
+  printi( 0, "main(): read %"PRIu64" frames (%"PRIu64" sec), %"PRIu64" fmf slices and %"PRIu64" fmf sound chunks\n",
+          frame_no, time_sec, fmf_slice_no, fmf_sound_no );
   if( !do_info )
-    printi( 0, "main(): wrote %"PRIu64" frame dropped %"PRIu64" frame and inserted %"PRIu64" frame\n",
-		output_no, drop_no, dupl_no );
+    printi( 0, "main(): wrote %"PRIu64" frames, dropped %"PRIu64" frames and inserted %"PRIu64" frames\n",
+            output_no, drop_no, dupl_no );
 
   return 0;
 }
