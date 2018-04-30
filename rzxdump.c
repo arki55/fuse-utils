@@ -361,7 +361,7 @@ write_snapshot( const char *filename, const unsigned char *buffer,
   } else {
 
 #ifdef LIBSPECTRUM_SUPPORTS_ZLIB_COMPRESSION
-    size_t new_length;
+    size_t new_length = 0;
     libspectrum_byte *new_buffer = NULL;
 
     error = libspectrum_zlib_inflate( buffer, length, &new_buffer,
