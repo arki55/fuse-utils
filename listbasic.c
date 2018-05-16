@@ -279,7 +279,7 @@ parse_tape_file( const unsigned char *buffer, size_t length,
     /* Start assuming this block is a BASIC header; firstly, check
        there is another block after this one to hold the data, and
        if there's not, just finish */
-    if( !libspectrum_tape_peek_next_block( tape ) ) break;
+    if( !libspectrum_tape_iterator_peek_next( iterator ) ) break;
 
     /* If it's a header, it must be 19 bytes long */
     if( libspectrum_tape_block_data_length( tape_block ) != 19 ) continue;
@@ -296,7 +296,7 @@ parse_tape_file( const unsigned char *buffer, size_t length,
     program_length = data[16] | data[17] << 8;
 
     /* Now have a look at the next block */
-    tape_block = libspectrum_tape_peek_next_block( tape );
+    tape_block = libspectrum_tape_iterator_peek_next( iterator );
 
     /* Must be a ROM block */
     if( libspectrum_tape_block_type( tape_block )
