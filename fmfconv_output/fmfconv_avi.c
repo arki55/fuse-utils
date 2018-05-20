@@ -252,10 +252,12 @@ out_write_avi( void )
     pos1 = ftell( out );
   else
     pos1 = 0;
+
 #ifdef USE_LIBJPEG
-  if( avi_subtype != TYPE_AVI_DIB )
+  if( avi_subtype != TYPE_AVI_DIB ) {
     err = out_build_avi_mjpeg_frame( &frame_buffer, &frame_size );
-  if( err ) return err;
+    if( err ) return err;
+  }
 #endif
 
   W2DWORD( vid_stream_id, frame_size );

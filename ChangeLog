@@ -2,6 +2,12 @@
 
         * Version 1.x.x released
 
+        * listbasic
+          * Fix processing tape files (thanks, Stuart Caie) (Fredrick Meunier).
+
+        * fmfconv
+          * Fix undefined behaviour when writing AVI files (Sergio Baldoví).
+
         * rzxdump
           * Fix crash when extracting compressed snapshots (Sergio Baldoví).
 
