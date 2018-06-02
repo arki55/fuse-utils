@@ -19,12 +19,12 @@ dnl
 dnl E-mail: philip-fuse@shadowmagic.org.uk
 
 dnl Package version
-m4_define([fuse_utils_version], [1.4.1])
+m4_define([fuse_utils_version], [1.4.2])
 
 dnl Product full version
 m4_define([fuse_utils_major_version], [1])
 m4_define([fuse_utils_minor_version], [4])
-m4_define([fuse_utils_micro_version], [1])
+m4_define([fuse_utils_micro_version], [2])
 m4_define([fuse_utils_nano_version],  [0])
 m4_define([fuse_utils_full_version],
           [fuse_utils_major_version.fuse_utils_minor_version.fuse_utils_micro_version.fuse_utils_nano_version])
@@ -190,7 +190,7 @@ if test "$ac_cv_c_compiler_gnu" = yes; then
 fi
 
 dnl Check that libspectrum is available and that it is new enough
-PKG_CHECK_MODULES([LIBSPECTRUM], [libspectrum >= 1.3.6])
+PKG_CHECK_MODULES([LIBSPECTRUM], [libspectrum >= 1.4.3])
 
 dnl Check if supplied libspectrum has its own internal GLib replacement
 AC_MSG_CHECKING(whether libspectrum has its own internal GLib replacement)

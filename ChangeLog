@@ -1,12 +1,14 @@
-2018-??-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+2018-06-03  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
-        * Version 1.x.x released
+        * Version 1.4.2 released
 
         * listbasic
           * Fix processing tape files (thanks, Stuart Caie) (Fredrick Meunier).
 
         * fmfconv
           * Fix undefined behaviour when writing AVI files (Sergio Baldoví).
+          * Don't change audio layout in lossless encode examples in manual 
+            (Sergio Baldoví).
 
         * rzxdump
           * Fix crash when extracting compressed snapshots (Sergio Baldoví).
