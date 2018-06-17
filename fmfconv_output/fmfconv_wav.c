@@ -133,6 +133,7 @@ snd_finalize_wav( void )
     printw( "snd_finalize_wav(): cannot finalize sound output file (not seekable).\n" );
   } else {
     if( pos & 1 ) {
+      buff[0] = 0;
       fwrite( buff, 1, 1, snd );		/* padding byte */
       pos++;
     }
