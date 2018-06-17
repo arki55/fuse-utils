@@ -183,6 +183,7 @@ write_pulses( char *filename, libspectrum_tape *tape )
   while( !(flags & LIBSPECTRUM_TAPE_FLAGS_TAPE) ) {
     error = libspectrum_tape_get_next_edge( &pulse_tstates, &flags, tape );
     if( error != LIBSPECTRUM_ERROR_NONE ) {
+      fclose( output_file );
       return 1;
     }
 
