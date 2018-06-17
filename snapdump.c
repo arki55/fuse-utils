@@ -141,10 +141,10 @@ print_memory_block( const char *name, const libspectrum_byte *data, size_t size 
 
   sha1 = calculate_sha1sum( data, size );
   if( sha1 ) {
-    printf( "%s size: 0x%04lX, sha1: %s\n", name, size, sha1 );
+    printf( "%s size: 0x%04lX, sha1: %s\n", name, (unsigned long)size, sha1 );
     libspectrum_free( sha1 );
   } else {
-    printf( "%s size: 0x%04lX\n", name, size );
+    printf( "%s size: 0x%04lX\n", name, (unsigned long)size );
   }
 
   if( dump_memory ) {
@@ -162,10 +162,11 @@ print_memory_page( const char *name, int page, const libspectrum_byte *data,
 
   sha1 = calculate_sha1sum( data, size );
   if( sha1 ) {
-    printf( "%s_%d size: 0x%04lX, sha1: %s\n", name, page, size, sha1 );
+    printf( "%s_%d size: 0x%04lX, sha1: %s\n", name, page, (unsigned long)size,
+            sha1 );
     libspectrum_free( sha1 );
   } else {
-    printf( "%s_%d size: 0x%04lX\n", name, page, size );
+    printf( "%s_%d size: 0x%04lX\n", name, page, (unsigned long)size );
   }
 
   if( dump_memory ) {
@@ -227,7 +228,7 @@ dump_divide( libspectrum_snap *snap )
   if( eprom_data ) print_memory_block( "divide_eprom", eprom_data, 0x2000 );
 
   pages = libspectrum_snap_divide_pages( snap );
-  printf( "DivIDE pages: %lu\n", pages );
+  printf( "DivIDE pages: %lu\n", (unsigned long)pages );
 
   for( i = 0; i < SNAPSHOT_DIVIDE_PAGES; i++ ) {
     ram_data = libspectrum_snap_divide_ram( snap, i );
@@ -253,7 +254,7 @@ dump_divmmc( libspectrum_snap *snap )
   if( eprom_data ) print_memory_block( "divmmc_eprom", eprom_data, 0x2000 );
 
   pages = libspectrum_snap_divmmc_pages( snap );
-  printf( "DivMMC pages: %lu\n", pages );
+  printf( "DivMMC pages: %lu\n", (unsigned long)pages );
 
   for( i = 0; i < SNAPSHOT_DIVMMC_PAGES; i++ ) {
     ram_data = libspectrum_snap_divmmc_ram( snap, i );
@@ -549,9 +550,9 @@ dump_zxatasp( libspectrum_snap *snap )
   printf( "ZXATASP control port: 0x%02X\n",
           libspectrum_snap_zxatasp_control( snap ) );
   printf( "ZXATASP RAM pages: %lu\n",
-          libspectrum_snap_zxatasp_pages( snap ) );
+          (unsigned long)libspectrum_snap_zxatasp_pages( snap ) );
   printf( "ZXATASP active page: %lu\n",
-          libspectrum_snap_zxatasp_current_page( snap ) );
+          (unsigned long)libspectrum_snap_zxatasp_current_page( snap ) );
 
   for( i = 0; i < SNAPSHOT_ZXATASP_PAGES; i++ ) {
     ram_page = libspectrum_snap_zxatasp_ram( snap, i );
@@ -574,7 +575,7 @@ dump_zxcf( libspectrum_snap *snap )
   printf( "ZXCF memmory control register: 0x%02X\n",
           libspectrum_snap_zxcf_memctl( snap ) );
   printf( "ZXCF RAM pages: %lu\n",
-          libspectrum_snap_zxcf_pages( snap ) );
+          (unsigned long)libspectrum_snap_zxcf_pages( snap ) );
 
   for( i = 0; i < SNAPSHOT_ZXCF_PAGES; i++ ) {
     ram_page = libspectrum_snap_zxcf_ram( snap, i );
@@ -660,7 +661,7 @@ dump_snapshot( libspectrum_snap *snap )
     printf( "\nCUSTOM ROM\n" );
     printf( "custom rom: %d\n", custom_rom );
     custom_rom_pages = libspectrum_snap_custom_rom_pages( snap );
-    printf( "custom rom pages: %lu\n", custom_rom_pages );
+    printf( "custom rom pages: %lu\n", (unsigned long)custom_rom_pages );
     for( i = 0; i < custom_rom_pages; i++ ) {
       print_memory_page( "custom_rom_", i, libspectrum_snap_roms( snap, i ),
                          libspectrum_snap_rom_length( snap, i ) );
@@ -734,14 +735,14 @@ dump_snapshot( libspectrum_snap *snap )
   dump_slt( snap );
 
   num_joysticks = libspectrum_snap_joystick_active_count( snap );
-  printf( "Joysticks: %lu\n", num_joysticks );
+  printf( "Joysticks: %lu\n", (unsigned long)num_joysticks );
   for( i = 0; i < num_joysticks; i++ ) {
-    printf( "Joystick %lu Type: %s\n", i,
+    printf( "Joystick %lu Type: %s\n", (unsigned long)i,
       libspectrum_joystick_name( libspectrum_snap_joystick_list( snap, i ) ) );
   }
 
   for( i = 0; i < num_joysticks; i++ ) {
-    printf( "Joystick %lu Inputs: %d\n", i,
+    printf( "Joystick %lu Inputs: %d\n", (unsigned long)i,
       libspectrum_snap_joystick_inputs( snap, i ) );
   }
 

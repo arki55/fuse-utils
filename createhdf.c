@@ -236,7 +236,7 @@ write_data( int fd, size_t cylinders, size_t heads, size_t sectors,
       bytes_written = write( fd, buffer, bytes_to_write );
       if( bytes_written != bytes_to_write ) {
 	fprintf( stderr, "%s: could write only %lu bytes out of %lu to '%s'",
-		 progname, (unsigned long)total_written + bytes_written,
+		 progname, (unsigned long)( total_written + bytes_written ),
 		 (unsigned long)data_size, filename );
 	return 1;
       }

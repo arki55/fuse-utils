@@ -235,7 +235,7 @@ do_file( const char *filename )
 
     default:
       fprintf( stderr, "%s: Unknown block type 0x%02x at offset %ld\n",
-               progname, id, ptr - buffer - 1 );
+               progname, id, (long)( ptr - buffer - 1 ) );
       free( buffer );
       return 1;
 
@@ -340,10 +340,11 @@ get_snap_filename( const char *rzx_archive, const char *extension,
   snap_filename = libspectrum_new( char, snap_filename_len );
 
   if( extension )
-    snprintf( snap_filename, snap_filename_len, "%s_%lu.%s", buffer2, number,
-              extension );
+    snprintf( snap_filename, snap_filename_len, "%s_%lu.%s", buffer2,
+              (unsigned long)number, extension );
   else
-    snprintf( snap_filename, snap_filename_len, "%s_%lu", buffer2, number );
+    snprintf( snap_filename, snap_filename_len, "%s_%lu", buffer2,
+              (unsigned long)number );
 
   free( buffer );
 
