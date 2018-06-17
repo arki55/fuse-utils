@@ -67,7 +67,7 @@ dump_symbol_table( libspectrum_tape_generalised_data_symbol_table *table )
   libspectrum_word symbols =
     libspectrum_tape_generalised_data_symbol_table_symbols_in_table( table );
 
-  printf("    Symbols in block: %ld\n", (unsigned long)libspectrum_tape_generalised_data_symbol_table_symbols_in_block( table ) );
+  printf("    Symbols in block: %lu\n", (unsigned long)libspectrum_tape_generalised_data_symbol_table_symbols_in_block( table ) );
   printf("    Max pulses: %d\n", pulses );
   printf("    Symbols in table: %d\n", symbols );
 
@@ -270,9 +270,9 @@ decode_header( libspectrum_tape_block *block )
   int error;
 
   if( !is_header ) {
-    printf( "  Datablock length: %ld\n", length - 2 );
+    printf( "  Datablock length: %lu\n", length - 2 );
     if( f ) {
-      fprintf( f, "  Datablock length: %ld\n", length - 2 );
+      fprintf( f, "  Datablock length: %lu\n", length - 2 );
     }
   }
 
@@ -493,7 +493,7 @@ process_tape( char *filename )
 
     case LIBSPECTRUM_TAPE_BLOCK_ROM:
       {
-        printf("  Block length: %ld bytes\n",
+        printf("  Block length: %lu bytes\n",
                (unsigned long)libspectrum_tape_block_data_length( block ) );
         decode_header( block );
         printf("  Pause length: %d ms\n",
@@ -502,7 +502,7 @@ process_tape( char *filename )
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_TURBO:
-      printf("  %ld pilot pulses of %d tstates\n",
+      printf("  %lu pilot pulses of %d tstates\n",
 	     (unsigned long)libspectrum_tape_block_pilot_pulses( block ),
 	     libspectrum_tape_block_pilot_length( block ) );
       printf("  Sync pulses of %d and %d tstates\n",
@@ -514,7 +514,7 @@ process_tape( char *filename )
       printf("  Data bits are %d (reset) and %d (set) tstates\n",
 	     libspectrum_tape_block_bit0_length( block ),
 	     libspectrum_tape_block_bit1_length( block ) );
-      printf("  Data length: %ld bytes (%ld bits in last byte used)\n",
+      printf("  Data length: %lu bytes (%lu bits in last byte used)\n",
 	     (unsigned long)libspectrum_tape_block_data_length( block ),
 	     libspectrum_tape_block_bits_in_last_byte(block) ? 
                (unsigned long)libspectrum_tape_block_bits_in_last_byte(block) :
@@ -524,22 +524,22 @@ process_tape( char *filename )
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_PURE_TONE:
-      printf("  %ld pulses of %ld tstates\n",
+      printf("  %lu pulses of %lu tstates\n",
 	     (unsigned long)libspectrum_tape_block_count( block ),
 	     (unsigned long)libspectrum_tape_block_pulse_length( block ) );
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_PULSES:
       for( i=0; i < libspectrum_tape_block_count( block ); i++ )
-	printf("  Pulse %3ld: length %d tstates\n",
+        printf("  Pulse %3lu: length %d tstates\n",
 	       (unsigned long)i,
 	       libspectrum_tape_block_pulse_lengths( block, i ) );
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_RAW_DATA:
-      printf("  Length: %ld bytes\n", (unsigned long)
+      printf("  Length: %lu bytes\n", (unsigned long)
 	     libspectrum_tape_block_data_length( block ) );
-      printf("  Bits in last byte: %ld\n",
+      printf("  Bits in last byte: %lu\n",
 	     (unsigned long)libspectrum_tape_block_bits_in_last_byte(block) );
       printf("  Each bit is %d tstates\n",
 	     libspectrum_tape_block_bit_length( block ) );
@@ -594,7 +594,7 @@ process_tape( char *filename )
 
     case LIBSPECTRUM_TAPE_BLOCK_SELECT:
       for( i = 0; i < libspectrum_tape_block_count( block ); i++ ) {
-	printf("  Choice %2ld: Offset %d: %s\n", (unsigned long)i,
+        printf("  Choice %2lu: Offset %d: %s\n", (unsigned long)i,
 	       libspectrum_tape_block_offsets( block, i ),
                convert_charset( libspectrum_tape_block_texts( block, i ) ) );
       }
@@ -652,14 +652,14 @@ process_tape( char *filename )
     case LIBSPECTRUM_TAPE_BLOCK_CUSTOM:
       printf( "  Description: %s\n", 
                     convert_charset( libspectrum_tape_block_text( block ) ) );
-      printf( "       Length: %ld bytes\n",
+      printf( "       Length: %lu bytes\n",
 	      (unsigned long)libspectrum_tape_block_data_length( block ) );
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_PULSE_SEQUENCE:
       printf( "  Initial polarity: low\n" );
       for( i=0; i < libspectrum_tape_block_count( block ); i++ )
-        printf("  Pulse %3ld: length %4d tstates, repeated %4ld times\n",
+        printf("  Pulse %3lu: length %4d tstates, repeated %4lu times\n",
              (unsigned long)i,
              libspectrum_tape_block_pulse_lengths( block, i ),
              (unsigned long)libspectrum_tape_block_pulse_repeats( block, i ) );
@@ -675,15 +675,15 @@ process_tape( char *filename )
       }
       printf("  Reset data bits are\n");
       for( i=0; i < libspectrum_tape_block_bit0_pulse_count( block ); i++ )
-	printf("    Pulse %3ld: length %4d tstates\n",
+        printf("    Pulse %3lu: length %4d tstates\n",
              (unsigned long)i,
              libspectrum_tape_block_bit0_pulses( block, i ) );
       printf("  Set data bits are\n");
       for( i=0; i < libspectrum_tape_block_bit1_pulse_count( block ); i++ )
-	printf("    Pulse %3ld: length %4d tstates\n",
+        printf("    Pulse %3lu: length %4d tstates\n",
              (unsigned long)i,
              libspectrum_tape_block_bit1_pulses( block, i ) );
-      printf("  Data length: %ld bytes (%ld bits in last byte used)\n",
+      printf("  Data length: %lu bytes (%lu bits in last byte used)\n",
 	     (unsigned long)libspectrum_tape_block_data_length( block ),
 	     libspectrum_tape_block_bits_in_last_byte(block) ? 
                (unsigned long)libspectrum_tape_block_bits_in_last_byte(block) :

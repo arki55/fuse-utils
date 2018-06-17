@@ -63,7 +63,7 @@ int
 get_creator( libspectrum_creator **creator, const char *program )
 {
   char *custom;
-  int version[4] = { 0, 0, 0, 0 };
+  unsigned int version[4] = { 0, 0, 0, 0 };
   libspectrum_error error;
   size_t i;
 

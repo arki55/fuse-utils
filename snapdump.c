@@ -648,17 +648,17 @@ dump_snapshot( libspectrum_snap *snap )
   printf( "IFF1:   %u\n", libspectrum_snap_iff1( snap ) );
   printf( "IFF2:   %u\n", libspectrum_snap_iff2( snap ) );
   printf( "IM:     %u\n", libspectrum_snap_im( snap ) );
-  printf( "halted: %u\n", libspectrum_snap_halted( snap ) );
-  printf( "last instruction EI: %u\n",
+  printf( "halted: %d\n", libspectrum_snap_halted( snap ) );
+  printf( "last instruction EI: %d\n",
           libspectrum_snap_last_instruction_ei( snap ) );
-  printf( "last instruction set flags: %u\n",
+  printf( "last instruction set flags: %d\n",
           libspectrum_snap_last_instruction_set_f( snap ) );
 
   /* Custom ROM */
   custom_rom = libspectrum_snap_custom_rom( snap );
   if( custom_rom ) {
     printf( "\nCUSTOM ROM\n" );
-    printf( "custom rom: %u\n", custom_rom );
+    printf( "custom rom: %d\n", custom_rom );
     custom_rom_pages = libspectrum_snap_custom_rom_pages( snap );
     printf( "custom rom pages: %lu\n", custom_rom_pages );
     for( i = 0; i < custom_rom_pages; i++ ) {
@@ -703,7 +703,7 @@ dump_snapshot( libspectrum_snap *snap )
   /* Peripheral status */
   printf( "\nPERIPHERAL STATUS\n" );
   printf( "tstates: %u\n", libspectrum_snap_tstates( snap ) );
-  printf( "late timings: %u\n", libspectrum_snap_late_timings( snap ) );
+  printf( "late timings: %d\n", libspectrum_snap_late_timings( snap ) );
   printf( "ULA: %02X\n", libspectrum_snap_out_ula( snap ) );
   printf( "128 mem: 0x%02X\n", libspectrum_snap_out_128_memoryport( snap ) );
   printf( "+3 mem: 0x%02X\n", libspectrum_snap_out_plus3_memoryport( snap ) );

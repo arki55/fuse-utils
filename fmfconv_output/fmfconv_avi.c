@@ -265,7 +265,7 @@ out_write_avi( void )
 
   if( frame_size & 0x01 ) WSTRING( "P" ); /* pad to even byte boundary */
 
-  printi( 4, "out_write_avi(): %ld byte image\n", frame_size );
+  printi( 4, "out_write_avi(): %lu byte image\n", frame_size );
 
   vid_frames_no++;
 

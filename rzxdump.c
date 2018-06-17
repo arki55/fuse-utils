@@ -198,7 +198,7 @@ do_file( const char *filename )
 
   if( end - ptr < (ptrdiff_t)strlen( rzx_signature ) + 6 ) {
     fprintf( stderr,
-	     "%s: Not enough bytes for RZX header (%ld bytes)\n",
+             "%s: Not enough bytes for RZX header (%lu bytes)\n",
 	     progname, (unsigned long)strlen( rzx_signature ) + 6 );
     free( buffer );
     return 1;
@@ -286,7 +286,7 @@ read_creator_block( unsigned char **ptr, unsigned char *end )
   printf( "Found a creator block\n" );
 
   length = read_dword( ptr );
-  printf( "  Length: %ld bytes\n", (unsigned long)length );
+  printf( "  Length: %lu bytes\n", (unsigned long)length );
   creator = *ptr; (*ptr) += 20;
   major_version = read_word( ptr );
   minor_version = read_word( ptr );
@@ -294,7 +294,7 @@ read_creator_block( unsigned char **ptr, unsigned char *end )
   printf( "  Creator major version: %d\n", major_version );
   printf( "  Creator minor version: %d\n", minor_version );
   print_canonical_version( (char *)creator, major_version, minor_version );
-  printf( "  Creator custom data: %ld bytes\n", (unsigned long)length - 29 );
+  printf( "  Creator custom data: %lu bytes\n", (unsigned long)length - 29 );
   (*ptr) += length - 29;
 
   return 0;
@@ -442,7 +442,8 @@ read_snapshot_block( unsigned char **ptr, unsigned char *end,
 static int
 read_input_block( unsigned char **ptr, unsigned char *end )
 {
-  size_t i, frames, length; int flags;
+  size_t i, frames, length;
+  int flags;
 
   if( end - *ptr < 17 ) {
     fprintf( stderr,
@@ -455,10 +456,10 @@ read_input_block( unsigned char **ptr, unsigned char *end )
   printf( "  Block: %lu\n", (unsigned long)block_number ); block_number++;
   
   length = read_dword( ptr );
-  printf( "  Length: %ld bytes\n", (unsigned long)length );
+  printf( "  Length: %lu bytes\n", (unsigned long)length );
 
   frames = read_dword( ptr );
-  printf( "  Frame count: %ld\n", (unsigned long)frames );
+  printf( "  Frame count: %lu\n", (unsigned long)frames );
 
   printf( "  Frame length (obsolete): %d bytes\n", *(*ptr)++ );
   printf( "  Tstate counter: %d\n", read_dword( ptr ) );
@@ -482,10 +483,10 @@ read_input_block( unsigned char **ptr, unsigned char *end )
 
       size_t count;
 
-      printf( "Examining frame %ld\n", (unsigned long)i );
+      printf( "Examining frame %lu\n", (unsigned long)i );
     
       if( end - *ptr < 4 ) {
-	fprintf( stderr, "%s: Not enough data for frame %ld\n", progname,
+	fprintf( stderr, "%s: Not enough data for frame %lu\n", progname,
 		 (unsigned long)i );
 	return 1;
       }
@@ -498,11 +499,11 @@ read_input_block( unsigned char **ptr, unsigned char *end )
 	continue;
       }
 
-      printf( "  IN count: %ld\n", (unsigned long)count );
+      printf( "  IN count: %lu\n", (unsigned long)count );
 
       if( end - *ptr < (ptrdiff_t)count ) {
 	fprintf( stderr,
-		 "%s: Not enough data for frame %ld (expected %ld bytes)\n",
+		 "%s: Not enough data for frame %lu (expected %lu bytes)\n",
 		 progname, (unsigned long)i, (unsigned long)count );
 	return 1;
       }
@@ -529,7 +530,7 @@ read_sign_start_block( unsigned char **ptr, unsigned char *end )
 
   length = read_dword( ptr );
 
-  printf( "  Length: %ld bytes\n", (unsigned long)length );
+  printf( "  Length: %lu bytes\n", (unsigned long)length );
   printf( "  Key ID: 0x%08x\n", (unsigned int)read_dword( ptr ) );
   printf( "  Week code: 0x%08x\n", (unsigned int)read_dword( ptr ) );
 
@@ -555,7 +556,7 @@ read_sign_end_block( unsigned char **ptr, unsigned char *end )
   printf( "Found a signed data end block\n" );
 
   length = read_dword( ptr );
-  printf( "  Length: %ld bytes\n", (unsigned long)length );
+  printf( "  Length: %lu bytes\n", (unsigned long)length );
 
   length -= 5;
 
