@@ -65,6 +65,7 @@ get_sound_type( int sound_type )
     break;
   case 'U':
     retval = ULW;
+    break;
   default:
     printe( "Unknown sound_type:%x\n", sound_type );
     exit( -1 );
