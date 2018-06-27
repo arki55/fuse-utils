@@ -35,6 +35,12 @@
 
 typedef std::list<unsigned int> pulse_list;
 
+#if __cplusplus >= 201103L
+  typedef std::unique_ptr<trigger> trigger_ptr;
+#else
+  typedef std::auto_ptr<trigger> trigger_ptr;
+#endif
+
 class soundfile {
 
   public:
@@ -60,7 +66,7 @@ class soundfile {
     double source_machine_hz;
     double sample_rate;
 
-    std::auto_ptr<trigger> edge_detector;
+    trigger_ptr edge_detector;
     std::vector<unsigned int> amplitude_frequency_table;
 };
 
