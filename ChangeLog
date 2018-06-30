@@ -1,3 +1,35 @@
+2018-07-??  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
+
+        * Version 1.4.3 released
+
+        * audio2tape
+          * Replace deprecated auto_ptr with unique_ptr (Sergio Baldoví).
+
+        * createhdf
+          * Cast size_t variables to unsigned long in printf() statements
+            (Sergio Baldoví).
+
+        * fmfconv
+          * Fix printf() conversion specifiers (Sergio Baldoví).
+          * Fix ULAW identification (Sergio Baldoví).
+          * Force pad byte to value zero in WAV files (Sergio Baldoví).
+
+        * rzxdump
+          * Cast size_t variables to unsigned long in printf() statements
+            (Sergio Baldoví).
+          * Fix printf() conversion specifiers (Sergio Baldoví).
+
+        * snapdump
+          * Cast size_t variables to unsigned long in printf() statements
+            (Sergio Baldoví).
+          * Fix printf() conversion specifiers (Sergio Baldoví).
+
+        * tape2pulses
+          * Close file on error (Sergio Baldoví).
+
+        * tzxlist
+          * Fix printf() conversion specifiers (Sergio Baldoví).
+
 2018-06-03  Philip Kendall  <philip-fuse@shadowmagic.org.uk>
 
         * Version 1.4.2 released
