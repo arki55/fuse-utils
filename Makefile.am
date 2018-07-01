@@ -56,8 +56,6 @@ createhdf_SOURCES = ide.c createhdf.c
 fmfconv_SOURCES = fmfconv.c \
 		  fmfconv_compr.c \
 		  fmfconv_types.c \
-                  fmfconv_input/fmfconv_fmfv1_read.c \
-                  fmfconv_input/fmfconv_scr_read.c \
 		  fmfconv_output/fmfconv_aiff.c \
 		  fmfconv_output/fmfconv_au.c \
 		  fmfconv_output/fmfconv_avi.c \
@@ -136,8 +134,6 @@ noinst_HEADERS = compat.h ide.h utils.h audio2tape.h importer/interpolator.h \
                  converter/getpulse2.h converter/getsync2.h \
                  converter/romloader.h converter/romloaderstate.h \
                  compat/getopt.h fmfconv.h fmfconv_compr.h fmfconv_types.h \
-                 fmfconv_input/fmfconv_fmfv1_read.h \
-                 fmfconv_input/fmfconv_scr_read.h \
                  movie_tables.h
 
 noinst_LIBRARIES =
