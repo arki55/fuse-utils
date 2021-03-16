@@ -24,7 +24,7 @@
 #ifndef FMFCONV_COMPR_H
 #define FMFCONV_COMPR_H
 
-#include <config.h>
+#include "config.h"
 
 #include <stdio.h>
 

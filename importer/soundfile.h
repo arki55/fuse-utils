@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "trigger.h"
 

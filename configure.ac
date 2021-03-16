@@ -198,7 +198,7 @@ ac_save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $LIBSPECTRUM_CFLAGS"
 AC_PREPROC_IFELSE(
   [AC_LANG_SOURCE([
-#include <libspectrum.h>
+#include "libspectrum.h"
 #if LIBSPECTRUM_HAS_GLIB_REPLACEMENT == 0
 #error "GLib replacement not found"
 #endif

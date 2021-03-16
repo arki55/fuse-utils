@@ -25,7 +25,7 @@
 #ifndef TRIGGER_H
 #define TRIGGER_H
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 class trigger {
   public:

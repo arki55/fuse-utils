@@ -21,7 +21,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +31,7 @@
 #define XMD_H
 #include <jpeglib.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "fmfconv.h"
 

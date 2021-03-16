@@ -25,7 +25,7 @@
 #ifndef SCHMITT_H
 #define SCHMITT_H
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "audio2tape.h"
 #include "importer/trigger.h"

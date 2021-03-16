@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "importer/soundfile.h"
 

@@ -24,7 +24,7 @@
 #ifndef FMFCONV_H
 #define FMFCONV_H
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "fmfconv_types.h"
 

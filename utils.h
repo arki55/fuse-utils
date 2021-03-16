@@ -24,7 +24,7 @@
 #ifndef FUSE_UTILS_UTILS_H
 #define FUSE_UTILS_UTILS_H
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 int init_libspectrum( void );
 int get_creator( libspectrum_creator **creator, const char *program );

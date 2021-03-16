@@ -21,7 +21,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <stddef.h>
 #include <stdio.h>
@@ -37,7 +37,7 @@
 #include <gcrypt.h>
 #endif				/* #ifdef HAVE_GCRYPT_H */
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "compat.h"
 #include "utils.h"

@@ -22,7 +22,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "utils.h"
 

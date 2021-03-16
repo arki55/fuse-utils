@@ -26,7 +26,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <getopt.h>
 #include <errno.h>
@@ -35,7 +35,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "compat.h"
 #include "utils.h"

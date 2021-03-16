@@ -21,7 +21,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -35,7 +35,7 @@
 #include <sys/utsname.h>
 #endif
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "compat.h"
 #include "utils.h"

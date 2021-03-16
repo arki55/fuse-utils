@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 typedef enum {
   STANDARD,	/* screen type $ -> normal Spectrum */

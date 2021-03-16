@@ -22,7 +22,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <exception>
 #include <iostream>
@@ -35,7 +35,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 extern "C" {
 #include "utils.h"

@@ -22,7 +22,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <errno.h>
 #include <getopt.h>
@@ -31,7 +31,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "compat.h"
 #include "utils.h"

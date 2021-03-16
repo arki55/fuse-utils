@@ -21,7 +21,7 @@
 
 */
 
-#include <config.h>
+#include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +34,7 @@
 #define Z_DEFAULT_COMPRESSION 6
 #endif
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "fmfconv.h"
 

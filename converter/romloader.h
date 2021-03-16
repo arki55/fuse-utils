@@ -26,7 +26,7 @@
 
 #include <vector>
 
-#include <libspectrum.h>
+#include "libspectrum.h"
 
 #include "converter/romloaderstate.h"
 #include "importer/soundfile.h"
