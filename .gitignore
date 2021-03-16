@@ -1,5 +1,8 @@
 *~
 *.a
+*.avi
+*.bak
+*.fmf
 *.orig
 *.reg
 /aclocal.m4
