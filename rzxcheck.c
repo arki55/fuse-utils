@@ -180,7 +180,7 @@ main( int argc, char **argv )
 
   free( buffer );
 
-  libspectrum_rzx_free( rzx ); free( rzx );
+  libspectrum_rzx_free( rzx );
   libspectrum_signature_free( &signature );
 
   if( error == LIBSPECTRUM_ERROR_SIGNATURE ) {
