@@ -38,7 +38,7 @@ jobs:
           .github/scripts/in_config.sh "libpng support: yes"
           .github/scripts/in_config.sh "libgcrypt support: yes"
           .github/scripts/in_config.sh "libaudiofile support: yes"
-          .github/scripts/in_config.sh "Internal GLib replacement: no"
+          .github/scripts/in_config.sh "libspectrum's internal GLib replacement: no"
 
       - name: (7) Make
         run: |

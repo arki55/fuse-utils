@@ -63,7 +63,7 @@ jobs:
           .github/scripts/in_config.sh "libpng support: yes"
           .github/scripts/in_config.sh "libgcrypt support: yes"
           .github/scripts/in_config.sh "libaudiofile support: no"
-          .github/scripts/in_config.sh "Internal GLib replacement: yes"
+          .github/scripts/in_config.sh "libspectrum's internal GLib replacement: yes"
         shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
 
       - name: (7) Make
