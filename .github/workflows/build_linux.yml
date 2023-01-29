@@ -17,6 +17,7 @@ jobs:
       - name: (3) Install dependencies
         run: |
           echo "Installing dependencies .."
+          sudo apt install -y libaudiofile-dev
           sudo apt install -y libspectrum-dev
 
       - name: (4) Autogen.sh
