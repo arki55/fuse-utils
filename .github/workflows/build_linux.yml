@@ -31,14 +31,13 @@ jobs:
 
       - name: (6) Verify output from configure
         run: |
-          cd ${GITHUB_WORKSPACE}/.github/scripts/
-          ./in_config.sh "The Fuse utils are ready to be compiled"
-          ./in_config.sh "zlib support: yes"
-          ./in_config.sh "libjpeg support: yes"
-          ./in_config.sh "libpng support: yes"
-          ./in_config.sh "libgcrypt support: yes"
-          ./in_config.sh "libaudiofile support: yes"
-          ./in_config.sh "Internal GLib replacement: no"
+          .github/scripts/in_config.sh "The Fuse utils are ready to be compiled"
+          .github/scripts/in_config.sh "zlib support: yes"
+          .github/scripts/in_config.sh "libjpeg support: yes"
+          .github/scripts/in_config.sh "libpng support: yes"
+          .github/scripts/in_config.sh "libgcrypt support: yes"
+          .github/scripts/in_config.sh "libaudiofile support: yes"
+          .github/scripts/in_config.sh "Internal GLib replacement: no"
 
       - name: (7) Make
         run: |

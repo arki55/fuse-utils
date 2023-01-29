@@ -56,14 +56,14 @@ jobs:
 
       - name: (6) Verify output from configure
         run: |
-          cd ${GITHUB_WORKSPACE}/.github/scripts/
-          ./in_config.sh "The Fuse utils are ready to be compiled"
-          ./in_config.sh "zlib support: yes"
-          ./in_config.sh "libjpeg support: no"
-          ./in_config.sh "libpng support: yes"
-          ./in_config.sh "libgcrypt support: yes"
-          ./in_config.sh "libaudiofile support: no"
-          ./in_config.sh "Internal GLib replacement: yes"
+          cd ${GITHUB_WORKSPACE}
+          .github/scripts/in_config.sh "The Fuse utils are ready to be compiled"
+          .github/scripts/in_config.sh "zlib support: yes"
+          .github/scripts/in_config.sh "libjpeg support: no"
+          .github/scripts/in_config.sh "libpng support: yes"
+          .github/scripts/in_config.sh "libgcrypt support: yes"
+          .github/scripts/in_config.sh "libaudiofile support: no"
+          .github/scripts/in_config.sh "Internal GLib replacement: yes"
         shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
 
       - name: (7) Make
