@@ -1,0 +1,95 @@
+name: Fuse-Utils Windows Build [ +fake glib ]
+run-name: Build Fuse-Utils for Windows / ${{ github.actor }} /
+on: [push]
+jobs:
+  build:
+    name: Build Fuse-Utils with Cygwin [ +fake glib ]
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      CYGWIN_NOWINPATH: 1
+    steps:
+      - name: (1) Prepare git (autocrlf)
+        run: git config --global core.autocrlf input
+
+      - name: (2) Check out repository code
+        uses: actions/checkout@v3
+
+      - name: (3) Install dependencies - Cygwin (32 bit) with libs
+        uses: cygwin/cygwin-install-action@master
+        with:
+          platform: x86
+          packages: \
+            autoconf \
+            automake \
+            bison \
+            flex \
+            gcc-core \
+            gcc-g++ \
+            gettext-devel \
+            libtool \
+            make \
+            mingw64-i686-bzip2 \
+            mingw64-i686-gcc-core \
+            mingw64-i686-gcc-g++ \
+            mingw64-i686-libgcrypt \
+            mingw64-i686-libgpg-error \
+            mingw64-i686-libpng \
+            mingw64-i686-win-iconv \
+            mingw64-i686-winpthread \
+            mingw64-i686-zlib \
+            pkg-config
+
+      - name: (4) Autogen.sh
+        run: bash ./autogen.sh
+
+      - name: (5) Configure for Windows
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ./configure \
+          --build=i686-pc-cygwin \
+          --host=i686-w64-mingw32 \
+          --prefix=/usr/local/i686-w64-mingw32 \
+          --disable-static \
+          | tee ./configure.out
+        shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
+
+      - name: (6) Verify output from configure
+        run: |
+          cd ${GITHUB_WORKSPACE}/.github/scripts/
+          ./in_config.sh "The Fuse utils are ready to be compiled"
+          ./in_config.sh "zlib support: yes"
+          ./in_config.sh "libjpeg support: no"
+          ./in_config.sh "libpng support: yes"
+          ./in_config.sh "libgcrypt support: yes"
+          ./in_config.sh "libaudiofile support: no"
+          ./in_config.sh "Internal GLib replacement: yes"
+        shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
+
+      - name: (7) Make
+        run: make
+
+      - name: (8) Install
+        run: make install-strip
+
+      - name: (9) Run tests
+        run: |
+          echo "Copying some dlls.."
+          cd ${GITHUB_WORKSPACE}
+          cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libbz2-1.dll .
+          cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libgcc_s_sjlj-1.dll .
+          cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libwinpthread-1.dll .
+          echo "Running make check.."
+          make check
+        shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
+
+      - name: (10) Upload generated files
+        uses: actions/upload-artifact@v3
+        with: 
+          name: fuse-utils-windows
+          path: |
+            README
+
+      - name: (11) Finish
+        run: |
+          echo "🍏 Finishing with status ${{ job.status }}."
