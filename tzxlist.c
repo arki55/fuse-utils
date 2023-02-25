@@ -419,12 +419,14 @@ static int
 process_tape( char *filename )
 {
   int error, min;
+  int current_loop_count = 1;
   float sec;
   unsigned char *buffer; size_t length;
   libspectrum_tape *tape;
   libspectrum_tape_iterator iterator;
   libspectrum_tape_block *block;
-  libspectrum_qword total_length = 0;
+  float tape_total_length = 0;
+  float block_total_length = 0;
   libspectrum_id_t type;
 
   size_t i;
@@ -485,9 +487,10 @@ process_tape( char *filename )
     printf( "--= Block #%d =--\n", block_num );
     printf( "  Block type 0x%02x (%s)\n", libspectrum_tape_block_type( block ),
 	    description );
-    printf("  Block duration: %.2f sec\n",
-           libspectrum_tape_block_length( block )/3500000.0 );
-    total_length += libspectrum_tape_block_length( block );
+    block_total_length = (libspectrum_tape_block_length( block ) / 3500000.0);
+    printf( "  Block duration: %.2f sec\n", block_total_length );
+    block_total_length *= current_loop_count;
+    tape_total_length += block_total_length;
 
     switch( libspectrum_tape_block_type( block ) ) {
 
@@ -573,9 +576,12 @@ process_tape( char *filename )
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_GROUP_END:
-    case LIBSPECTRUM_TAPE_BLOCK_LOOP_END:
     case LIBSPECTRUM_TAPE_BLOCK_STOP48:
       /* Do nothing */
+      break;
+
+    case LIBSPECTRUM_TAPE_BLOCK_LOOP_END:
+      current_loop_count = 1;
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_SET_SIGNAL_LEVEL:
@@ -588,8 +594,8 @@ process_tape( char *filename )
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_LOOP_START:
-      printf("  Count: %lu\n",
-	     (unsigned long)libspectrum_tape_block_count( block ) );
+      current_loop_count = libspectrum_tape_block_count( block );
+      printf( "  Count: %lu\n", (unsigned long)current_loop_count );
       break;
 
     case LIBSPECTRUM_TAPE_BLOCK_SELECT:
@@ -693,6 +699,11 @@ process_tape( char *filename )
       decode_header( block );
       break;
 
+    /* Libspectrum up to 1.5.0 has no support for blocks:
+       LIBSPECTRUM_TAPE_BLOCK_CSW (0x18)
+       LIBSPECTRUM_TAPE_BLOCK_SEQ_CALL (0x26)
+       LIBSPECTRUM_TAPE_BLOCK_SEQ_RET (0x27)
+    */
     default:
       printf("  (Sorry -- %s can't handle that kind of block. Skipping it)\n",
 	     progname );
@@ -705,8 +716,8 @@ process_tape( char *filename )
 
   }
 
-  min = ( total_length / 3500000.0 ) / 60;
-  sec = ( total_length / 3500000.0 ) - min * 60;
+  min = tape_total_length / 60;
+  sec = tape_total_length - min * 60;
   printf( "Total tape duration: %d min, %.2f sec\n", min, sec );
 
   error = libspectrum_tape_free( tape );
