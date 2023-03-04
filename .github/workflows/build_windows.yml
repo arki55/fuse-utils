@@ -24,5 +24,6 @@ jobs:
     needs: [libspectrum]
     uses: ./.github/workflows/build_windows_sub.yml
     with:
+      name: Default
       dependencies: "mingw64-i686-libxml2"
       configure_params: ""
