@@ -64,7 +64,7 @@ jobs:
             mingw64-i686-gcc-g++ \
             mingw64-i686-libgcrypt \
             mingw64-i686-libgpg-error \
-            mingw64-i686-libjpeg \
+            mingw64-i686-libjpeg-turbo \
             mingw64-i686-libpng \
             mingw64-i686-win-iconv \
             mingw64-i686-winpthread \
