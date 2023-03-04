@@ -66,14 +66,13 @@ jobs:
       - name: (7) Verify output from configure
         # Most of the tested strings are common for all Linux builds
         run: |          
-          .github/scripts/in_config.sh "Fuse options"
+          .github/scripts/in_config.sh "The Fuse utils are ready to be compiled"
           .github/scripts/in_config.sh "zlib support: yes"
-          .github/scripts/in_config.sh "libxml2 support: yes"
+          .github/scripts/in_config.sh "libjpeg support: yes"
           .github/scripts/in_config.sh "libpng support: yes"
-          .github/scripts/in_config.sh "Spectranet support: yes"
-          .github/scripts/in_config.sh "SpeccyBoot support: yes"
-          .github/scripts/in_config.sh "TTX2000 S support: yes"
-          .github/scripts/in_config.sh "Desktop integration: no"
+          .github/scripts/in_config.sh "libgcrypt support: yes"
+          .github/scripts/in_config.sh "libaudiofile support: yes"
+          .github/scripts/in_config.sh "libspectrum's internal GLib replacement: no"
 
       - if: ${{ inputs.verify1 }}
         run: |
