@@ -16,14 +16,6 @@ on:
         type: string
         required: false
         default: ""
-      verify1:
-        type: string
-        required: false
-        default: ""
-      verify2:
-        type: string
-        required: false
-        default: ""
 
 jobs:
   build:
@@ -73,14 +65,6 @@ jobs:
           .github/scripts/in_config.sh "libgcrypt support: yes"
           .github/scripts/in_config.sh "libaudiofile support: yes"
           .github/scripts/in_config.sh "libspectrum's internal GLib replacement: no"
-
-      - if: ${{ inputs.verify1 }}
-        run: |
-          .github/scripts/in_config.sh "${{ inputs.verify1 }}"
-
-      - if: ${{ inputs.verify2 }}
-        run: |
-          .github/scripts/in_config.sh "${{ inputs.verify2 }}"
 
       - name: (7) Make
         run: make

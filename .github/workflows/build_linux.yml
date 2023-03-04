@@ -28,5 +28,3 @@ jobs:
       name: Default
       dependencies: "libaudiofile-dev"
       configure_params: ""
-      verify1: ""
-      verify2: ""

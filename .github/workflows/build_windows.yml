@@ -1,0 +1,28 @@
+name: Fuse Utils For Windows
+run-name: Build Fuse Utils for Windows / ${{ github.actor }} /
+
+# Executed upon each commit pushed, merge commit in PR
+on: [push, pull_request]
+
+jobs:
+  libspectrum:
+    # Reuse libspectrum's build wokflow and artefact (all libs enabled, fake glib)
+    name: "Libspectrum lib (Windows)"
+    uses: arki55/fuse-libspectrum/.github/workflows/build_windows_sub.yml@arki55/github-workflows
+    with:
+      branch: arki55/github-workflows
+      key: fuse-utils
+      # repo name is taken from var.LIBSPECTRUM_REPO
+
+########################################
+### SUPPORTED Windows configurations ###
+########################################
+
+  # Win32 / 1
+  utils-win32-default:
+    name: "Fuse Utils Default (Windows)"
+    needs: [libspectrum]
+    uses: ./.github/workflows/build_windows_sub.yml
+    with:
+      dependencies: "mingw64-i686-libxml2"
+      configure_params: ""
