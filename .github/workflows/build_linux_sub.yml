@@ -1,0 +1,77 @@
+# Reusable workflow for all Linux builds
+name: Fuse Utils For Linux
+run-name: Build Fuse Utils for Linux / ${{ github.actor }} /
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        required: true
+      dependencies:
+        type: string
+        required: false
+        default: ""
+      configure_params:
+        type: string
+        required: false
+        default: ""
+
+jobs:
+  build:
+    name: Build Utils
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: (1) Install dependencies
+        if: ${{ inputs.dependencies }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{ inputs.dependencies }}
+
+      - name: (2) Check out repository code
+        uses: actions/checkout@v3
+
+      - name: (3) Download libspectrum artefact
+        uses: actions/download-artifact@v3
+        with:
+          name: libspectrum-installed-linux-fuse-utils
+          path: libspectrum
+
+      - name: (4) Install libspectrum from artefact
+        run: |
+          # Extract (-x) files into /usr/local
+          sudo tar --directory / -xvf libspectrum/libspectrum-installed-linux.tar
+          echo "Done"
+
+      - name: (5) Autogen.sh
+        run: ./autogen.sh
+
+      - name: (6) Configure for Linux
+        run: |
+          ./configure ${{ inputs.configure_params }} \
+          |& tee ./configure.out
+
+      - name: (7) Verify output from configure
+        # Most of the tested strings are common for all Linux builds
+        run: |          
+          .github/scripts/in_config.sh "The Fuse utils are ready to be compiled"
+          .github/scripts/in_config.sh "zlib support: yes"
+          .github/scripts/in_config.sh "libjpeg support: yes"
+          .github/scripts/in_config.sh "libpng support: yes"
+          .github/scripts/in_config.sh "libgcrypt support: yes"
+          .github/scripts/in_config.sh "libaudiofile support: yes"
+          .github/scripts/in_config.sh "libspectrum's internal GLib replacement: no"
+
+      - name: (7) Make
+        run: make
+
+      - name: (8) Install
+        run: sudo make install
+
+      - name: (9) Finish
+        run: |
+          echo "🍏 Finishing with status ${{ job.status }}."
