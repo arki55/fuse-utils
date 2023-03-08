@@ -1,0 +1,30 @@
+name: Fuse Utils For MacOS
+run-name: Build Fuse Utils for MacOS / ${{ github.actor }} /
+
+# Executed upon each commit pushed, merge commit in PR
+on: [push, pull_request]
+
+jobs:
+  libspectrum:
+    # Reuse libspectrum's build wokflow and artefact (all libs enabled, real glib)
+    name: "Libspectrum lib (MacOS)"
+    uses: arki55/fuse-libspectrum/.github/workflows/build_macos_sub.yml@arki55/github-workflows
+    with:
+      branch: arki55/github-workflows
+      key: fuse-utils
+      # repo name is taken from var.LIBSPECTRUM_REPO
+
+
+#########################################
+### SUPPORTED MacOS configurations ###
+#########################################
+
+  # Default build without any configure params
+  utils-default:
+    name: "Fuse Utils Default (Utils)"
+    needs: [libspectrum]
+    uses: ./.github/workflows/build_macos_sub.yml
+    with:
+      name: Default
+      dependencies: ""
+      configure_params: ""
