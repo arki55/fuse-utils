@@ -1,0 +1,30 @@
+name: Fuse Utils For Linux
+run-name: Build Fuse Utils for Linux / ${{ github.actor }} /
+
+# Executed upon each commit pushed, merge commit in PR
+on: [push, pull_request]
+
+jobs:
+  libspectrum:
+    # Reuse libspectrum's build wokflow and artefact (all libs enabled, real glib)
+    name: "Libspectrum lib (Linux)"
+    uses: arki55/fuse-libspectrum/.github/workflows/build_linux_sub.yml@arki55/github-workflows
+    with:
+      branch: arki55/github-workflows
+      key: fuse-utils
+      # repo name is taken from var.LIBSPECTRUM_REPO
+
+
+#########################################
+### SUPPORTED Linux configurations ###
+#########################################
+
+  # Default build without any configure params
+  utils-default:
+    name: "Fuse Utils Default (Linux)"
+    needs: [libspectrum]
+    uses: ./.github/workflows/build_linux_sub.yml
+    with:
+      name: Default
+      dependencies: "libaudiofile-dev"
+      configure_params: ""
